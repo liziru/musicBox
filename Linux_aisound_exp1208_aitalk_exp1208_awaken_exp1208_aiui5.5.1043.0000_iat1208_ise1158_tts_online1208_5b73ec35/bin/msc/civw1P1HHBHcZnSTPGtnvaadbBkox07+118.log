@@ -1,0 +1,180 @@
+============================================================
+Time  2018/08/22 17:37:32 599 
+============================================================
+[2018/08/22 17:37:32 599] ivw_local  1287 os_type is:  Linux  
+[2018/08/22 17:37:32 599] ivw_local  1296 ivw loaded!  
+[2018/08/22 17:37:32 599] ivw_local  1298 1001.60.1421  
+[2018/08/22 17:37:32 599] ivw_local  1231 SYS_MSG_REGCB  msp_status_cb  func(a802b890) 
+[2018/08/22 17:37:32 599] ivw_local  1321 last gc at  1534930652  
+[2018/08/22 17:37:32 599] ivw_local  1046 IVW_LOCAL_INIT_CHECK  
+[2018/08/22 17:37:32 599] ivw_local  1052 ivw_res_path:  fo|res/ivw/wakeupresource.jet  
+[2018/08/22 17:37:32 599] ivw_local  681  lgi:  nil  nil  
+[2018/08/22 17:37:32 599] ivw_local  685  fo|res/ivw/wakeupresource.jet  1  
+[2018/08/22 17:37:32 599] ivw_local  476  err  0  
+[2018/08/22 17:37:32 599] ivw_local  477  res_ver  3  
+[2018/08/22 17:37:32 599] ivw_local  478  res_appid_md5    
+[2018/08/22 17:37:32 599] ivw_local  479  res_id    
+[2018/08/22 17:37:32 599] ivw_local  480  |%fsoniah%=|%fwwnc%=%2e04bd42%+%ubtnc%=%271fa>e5c?053f46>1?a>435f6>3a14e%+%ubts~wb%=%c%z+%nqpphuc%=|%irj%=6+%phuct%=\|%nc%=7+%sbs%=%cb5jf4n6~f3%+%soubtohkc%=6327zZz+%ubttn}b%=>?1321+%ubtsnjb%=6243452710+%ubtqbu%=%q1777%z  
+[2018/08/22 17:37:32 599] ivw_local  488  speech_plus_setting  0  
+[2018/08/22 17:37:32 600] ivw_local  540  de2ma3xi1ya4  0  1450  
+[2018/08/22 17:37:32 600] ivw_local  572  d  
+[2018/08/22 17:37:32 600] ivw_local  601  now expires:  1534930652  nil  
+[2018/08/22 17:37:32 600] auth       78   ivw  app  nil  506af9b2d8724a31968f9342a194f63b  {"ivw":{"ver":"2","bus":{"expire_date":1539507801,"forbid":"0","nlimit":3},"res":{"md5":"506af9b2d8724a31968f9342a194f63b","blist":{}}}}  
+[2018/08/22 17:37:32 600] auth       220  nil  
+[2018/08/22 17:37:32 600] auth       229  auth ivw_res_id  506af9b2d8724a31968f9342a194f63b  
+[2018/08/22 17:37:32 600] auth       243  auth get ivw_res_id  506af9b2d8724a31968f9342a194f63b  
+[2018/08/22 17:37:32 600] auth       331  nil  
+[2018/08/22 17:37:32 600] ivw_local  428  app auth  
+[2018/08/22 17:37:32 600] auth       589  ivw  table(a8044630) nil  nil  appid = 5b73ec35,work_dir = .  
+[2018/08/22 17:37:32 600] auth       598  app  nil  nil  506af9b2d8724a31968f9342a194f63b  
+[2018/08/22 17:37:32 600] auth       655  ath rquest  {"authorize":[{"ver":"2.1.1","busin":"ivw"}]}  
+[2018/08/22 17:37:32 601] transport  645  paramkvsport is   nil  
+[2018/08/22 17:37:32 601] transport  657  ns_enable=  1  
+[2018/08/22 17:37:32 601] transport  659  2017-08--24 is_ns_need_close =   nil  
+[2018/08/22 17:37:32 601] transport  665  net.nettype=  unknown  
+[2018/08/22 17:37:32 601] transport  675  url.full=  nil  
+[2018/08/22 17:37:32 601] transport  676  urltmp=  nil  
+[2018/08/22 17:37:32 601] transport  680  server_url_host=, server_url_port=, server_url_path=  open.xf-yun.com  nil  /msp.do  
+[2018/08/22 17:37:32 601] transport  708  url.full=  nil  
+[2018/08/22 17:37:32 601] transport  907  net type:  unknown  
+[2018/08/22 17:37:32 601] transport  908  net operator:  def  
+[2018/08/22 17:37:32 601] transport  909  use proxy:  false  
+[2018/08/22 17:37:32 601] auth       710  not login!  
+[2018/08/22 17:37:32 601] auth       547  [session] send auth request  
+[2018/08/22 17:37:32 601] transport  1107 session.domain=  open.xf-yun.com  
+[2018/08/22 17:37:32 601] transport  1108 url.host=  open.xf-yun.com  
+[2018/08/22 17:37:32 601] transport  1085 NAMESERVER START  
+[2018/08/22 17:37:32 601] transport  1088 name =   ath  
+[2018/08/22 17:37:32 601] ns         629  ntt=  unknown  
+[2018/08/22 17:37:32 601] transport  1091 trans,ns_inprog =  0  
+[2018/08/22 17:37:32 601] ns         585  name server start  
+[2018/08/22 17:37:32 601] ns         586  ns_sub =   ath  
+[2018/08/22 17:37:32 601] ns         588  ns_host=  open.xf-yun.com  
+[2018/08/22 17:37:32 601] ns         479  ns_host=  open.xf-yun.com  
+[2018/08/22 17:37:32 601] ns         558  GET /sip/resolver?srand=0822173711.32 HTTP/1.1
+Host: hdns.openspeech.cn
+Connection: Keep-Alive
+X-Par: ver=1.3&appid=5b73ec35&operator=UNKNOW&nettype=STANDARD&cver=5.0.39.1208&svc=ath&host=open.xf-yun.com&sign=80200bad93a72a565d49376d978349ff
+User-Agent: iFLYCloud
+
+  
+[2018/08/22 17:37:32 601] ns         559  net_type =  standard  
+[2018/08/22 17:37:32 601] ns         560  cmwapascmnet =  
+[2018/08/22 17:37:32 601] ns         561  uniwapasuninet =  
+[2018/08/22 17:37:32 601] ns         562  ctwapasctnet =  
+[2018/08/22 17:37:32 601] ns         579  host=  hdns.openspeech.cn  
+[2018/08/22 17:37:32 601] network    263  gethostbyname  hdns.openspeech.cn  ns1  
+[2018/08/22 17:37:32 602] auth       554  0  
+[2018/08/22 17:37:32 602] auth       517  lver:  nil  
+[2018/08/22 17:37:32 602] auth       522  cfg_ver:  nil  
+[2018/08/22 17:37:32 602] transport  1854 transport_obj.send | in  
+[2018/08/22 17:37:32 602] transport  1860 self.msg_flag_q  table(a8046880) 
+[2018/08/22 17:37:32 602] transport  1861 self.msg_q  table(a802ba60) 
+[2018/08/22 17:37:32 602] transport  1793 transport_obj.try2send | in  
+[2018/08/22 17:37:32 602] transport  1794 self.soc  nil  
+[2018/08/22 17:37:32 602] transport  1795 self.connected  false  
+[2018/08/22 17:37:32 602] transport  1796 self.latesterr  0  
+[2018/08/22 17:37:32 602] transport  1867 transport_obj.send | out  
+[2018/08/22 17:37:32 602] ivw_local  652  forbid_ivw =  0  
+[2018/08/22 17:37:32 602] ivw_local  1085 0  res/ivw/wakeupresource.jet  nil  nil  229  0  0  0:1450;  0:de2ma3xi1ya4;  
+[2018/08/22 17:37:32 602] network    245  dns resp  0  ns1  
+[2018/08/22 17:37:32 602] ns         425  ns dns ok  117.121.56.5  
+[2018/08/22 17:37:32 602] ns         205  iplist not avail  
+[2018/08/22 17:37:32 603] ns         432  is_voicecloud_ip=  0  
+[2018/08/22 17:37:32 603] ns         439  ip_is_expected=  true  
+[2018/08/22 17:37:32 603] ns         447  ip_is_expected=  true  
+[2018/08/22 17:37:32 603] network    445  gethttpresp2  117.121.56.5  80  ns2  
+[2018/08/22 17:37:32 603] network    465  prot_type  tcp  
+[2018/08/22 17:37:32 603] transport  194  [dns] [1] response 42.62.116.34  
+[2018/08/22 17:37:32 603] transport  202  42  62  116  34  
+[2018/08/22 17:37:32 603] transport  204  ipv =  v4  
+[2018/08/22 17:37:32 603] transport  208  dns ip is v4  
+[2018/08/22 17:37:32 603] transport  130  iplist not avail  
+[2018/08/22 17:37:32 603] transport  247  no iplist now  
+[2018/08/22 17:37:32 603] network    95   iptoenv ,  ipcache  open.xf-yun.com  def  42.62.116.34  
+[2018/08/22 17:37:32 604] transport  291  dns cb start conn  
+[2018/08/22 17:37:32 604] transport  1303 [soc] connect   42.62.116.34  1028  
+[2018/08/22 17:37:32 604] transport  1315 mspsoc.open,prot_type=  tcp  
+[2018/08/22 17:37:32 634] ivw_local  1279 IVW_LOCAL_INSTSID param0 param1  civw1P1HHBHcZnSTPGtnvaadbBkox07+118  udata(c2f32440) 
+[2018/08/22 17:37:32 634] ivw_local  1321 last gc at  1534930652  
+[2018/08/22 17:37:32 655] transport  473  [soc] [1] connected  
+[2018/08/22 17:37:32 655] transport  1793 transport_obj.try2send | in  
+[2018/08/22 17:37:32 655] transport  1794 self.soc  udata(a80405d8) 
+[2018/08/22 17:37:32 655] transport  1795 self.connected  true  
+[2018/08/22 17:37:32 655] transport  1796 self.latesterr  0  
+[2018/08/22 17:37:32 655] transport  1813 transport:try2send,#msg_q=  1  
+[2018/08/22 17:37:32 655] transport  1358 build http request.  
+[2018/08/22 17:37:32 655] transport  1471 POST /msp.do HTTP/1.1
+X-Sub: auth
+X-Par: ver=MSSP+0%2E9&sub=auth&cmd=rath&key=08ym0YAFaHv7Q=
+CT: multipart/mixed;boundary=--
+CL: 358
+
+----
+Content-Length:48
+Content-Type:text/appinfo
+Content-Encoding:gzip
+
+36
+xúÀN≠¥5325±∞0N5NIL25I243KL445¥03O6≤∞HJ  
+[2018/08/22 17:37:32 655] transport  1813 transport:try2send,#msg_q=  0  
+[2018/08/22 17:37:32 655] transport  482  [soc] [1] send ok  498  
+[2018/08/22 17:37:32 655] transport  1793 transport_obj.try2send | in  
+[2018/08/22 17:37:32 656] transport  1794 self.soc  udata(a80405d8) 
+[2018/08/22 17:37:32 656] transport  1795 self.connected  true  
+[2018/08/22 17:37:32 656] transport  1796 self.latesterr  0  
+[2018/08/22 17:37:32 656] transport  1813 transport:try2send,#msg_q=  0  
+[2018/08/22 17:37:32 687] transport  494  [soc] [1] readable  
+[2018/08/22 17:37:32 687] transport  1761 HTTP/1.1 200 OK
+Content-Length: 123
+X-Req-Date: 2018/08/22 17:37:32 679
+X-Par: ver=MSSP+0%2E9&ret=0&key=0984q573ctWTjI/E8BI8CiRKPGV/MGxAolfH93e3csyBBI10uKCR4dXQ==
+CE: gzip
+CT: binary/authinfo
+CL: 123
+Content-Length: 123
+X-Res-Date: 2018/08/22 17:37:32 694
+
+136
+xúçÀ
+√ Dˇe÷.|G˝ô¢®p!èb“4 ˘˜öŒrÊ¶ÉŒ/B«Y$“gärΩ©ïWéGAFy√'«C›Z¢<`>‡u¶Öu3¥Úól∆h∏ç’'ô›$uT¬[WΩ“2
+Ø´UÈ9öijøG~®A'Ø  
+[2018/08/22 17:37:32 688] transport  1489 a_complete_httpmessage  200  
+[2018/08/22 17:37:32 688] transport  1599 is_update  true  
+[2018/08/22 17:37:32 688] transport  1603 port updated  1028  
+[2018/08/22 17:37:32 688] transport  1605 switch  1028  
+[2018/08/22 17:37:32 688] auth       366  [trans] [id = table: 0x7fbaa80447a0;;;=0===;auth] readable  
+[2018/08/22 17:37:32 689] network    90   ipfromenv ,  ipcache  open.xf-yun.com  def  42.62.116.34  
+[2018/08/22 17:37:32 689] transport  981  cached ip is confirmed  
+[2018/08/22 17:37:32 689] transport  1331 [soc] disconnect   
+[2018/08/22 17:37:32 689] transport  991  transport clean  
+[2018/08/22 17:37:32 689] auth       402  auth_json=  udata(a803ff38) 
+[2018/08/22 17:37:32 689] auth       403  tostring(auth_json)=  {"ivw":{"ver":"2","bus":{"expire_date":1539507801,"forbid":"0","nlimit":3},"res":{"md5":"506af9b2d8724a31968f9342a194f63b","blist":{}}}}  
+[2018/08/22 17:37:32 689] auth       78   ivw  app  nil  506af9b2d8724a31968f9342a194f63b  {"ivw":{"ver":"2","bus":{"expire_date":1539507801,"forbid":"0","nlimit":3},"res":{"md5":"506af9b2d8724a31968f9342a194f63b","blist":{}}}}  
+[2018/08/22 17:37:32 689] auth       220  nil  
+[2018/08/22 17:37:32 689] auth       229  auth ivw_res_id  506af9b2d8724a31968f9342a194f63b  
+[2018/08/22 17:37:32 690] auth       243  auth get ivw_res_id  506af9b2d8724a31968f9342a194f63b  
+[2018/08/22 17:37:32 690] auth       423  auth ok!  
+[2018/08/22 17:37:33 639] network    350  connected  ns2  
+[2018/08/22 17:37:33 640] network    353  send ok  271  ns2  
+[2018/08/22 17:37:33 651] network    362  readable  ns2  
+[2018/08/22 17:37:33 651] network    366  HTTP/1.1 200 OK
+Date: Wed, 22 Aug 2018 09:37:31 GMT
+Content-Type: application/json
+Content-Length: 312
+Connection: keep-alive
+Server: iflytek/hdns
+
+{"dns":[{"host":"open.xf-yun.com","sip":[{"svc":"ath","ips":[{"ip":"116.213.69.195","port":8080,"idc":"ch"},{"ip":"117.121.56.3","port":80,"idc":"ch"}],"ttl":6000,"compel":0}]}],"default":[{"host":"open.xf-yun.com","sip":[{"svc":"ath","ips":[{"ip":"117.121.56.3","port":80,"idc":"ch"}],"ttl":6000,"compel":0}]}]}  
+[2018/08/22 17:37:33 651] ns         256  name server http resp  table(a8048430) 0  udata(a802c028) 
+[2018/08/22 17:37:33 651] ns         269  ns response OK for this time!  
+[2018/08/22 17:37:33 651] ns         280  from_server=  iflytek/hdns  
+[2018/08/22 17:37:33 652] ns         363  compel :  0  
+[2018/08/22 17:37:33 652] ns         374  tick()=  116422853  
+[2018/08/22 17:37:33 652] ns         378  tick()mod=  116422853  
+[2018/08/22 17:37:33 652] ns         379  ns_host=  open.xf-yun.com  
+[2018/08/22 17:37:33 653] ns         392  ns_host=  open.xf-yun.com  
+[2018/08/22 17:37:33 653] ns         658  no data in ns_q  
+[2018/08/22 17:37:33 653] ns         659  conti_ns,ns_inprog =   1  
+[2018/08/22 17:37:38 984] ivw_local  1208 SYS_MSG_UNLOAD  
+[2018/08/22 17:37:38 984] ivw_local  1321 last gc at  1534930652  

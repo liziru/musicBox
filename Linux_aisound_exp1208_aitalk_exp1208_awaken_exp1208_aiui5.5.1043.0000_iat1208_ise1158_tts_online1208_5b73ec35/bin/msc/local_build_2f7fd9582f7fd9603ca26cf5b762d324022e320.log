@@ -1,0 +1,31 @@
+============================================================
+Time  2018/08/17 10:04:34 499 
+============================================================
+[2018/08/17 10:04:34 499] isr_local  2168 os_type is:  Linux  
+[2018/08/17 10:04:34 499] isr_local  2177 SYS_MSG_LOAD_LOCAL  
+[2018/08/17 10:04:34 499] isr_local  2206 SYS_MSG_REGCB_LOCAL| param0 =  msp_status_cb  
+[2018/08/17 10:04:34 499] isr_local  2265 last gc at  1534471474  
+[2018/08/17 10:04:34 499] isr_local  2206 SYS_MSG_REGCB_LOCAL| param0 =  build_grm_cb  
+[2018/08/17 10:04:34 499] isr_local  2265 last gc at  1534471474  
+[2018/08/17 10:04:34 499] isr_local  2219 ASR_LOCAL_MSG_BUILD_GRM  
+[2018/08/17 10:04:34 499] isr_local  1860 grm_init | params:  engine_type = local, 		asr_res_path = fo|res/asr/common.jet, sample_rate = 16000, 		grm_build_path = res/asr/GrmBuilld,   
+[2018/08/17 10:04:34 499] isr_local  803  engine_type  :  local  
+[2018/08/17 10:04:34 499] isr_local  803  asr_res_path  :  fo|res/asr/common.jet  
+[2018/08/17 10:04:34 499] isr_local  803  sample_rate  :  16000  
+[2018/08/17 10:04:34 499] isr_local  803  grm_build_path  :  res/asr/GrmBuilld  
+[2018/08/17 10:04:34 499] isr_local  1000 file count =   1  
+[2018/08/17 10:04:34 499] isr_local  923  file open type is:   fo  
+[2018/08/17 10:04:34 499] isr_local  956  res/asr/common.jet  0  0  
+[2018/08/17 10:04:34 499] isr_local  1018 speech_plus_setting  0  
+[2018/08/17 10:04:34 499] isr_local  1031 2  nil  res/asr/common.jet  0  0  
+[2018/08/17 10:04:34 499] isr_local  1033 res_ver  2  
+[2018/08/17 10:04:34 499] isr_local  1034 res 5  e14c7cd9b8fb3da729f243b4e5da5088  
+[2018/08/17 10:04:34 499] isr_local  1035 res_new_old_mark  v5pp  
+[2018/08/17 10:04:34 499] isr_local  1036 res_usr_name  ""  
+[2018/08/17 10:04:34 499] isr_local  1037 res_expires  1537347784  
+[2018/08/17 10:04:34 499] isr_local  1038 err  0  
+[2018/08/17 10:04:34 499] isr_local  1054 lgi appid 5  e14c7cd9b8fb3da729f243b4e5da5088  
+[2018/08/17 10:04:34 499] isr_local  1069 now expires:  1534471474  1537347784  
+[2018/08/17 10:04:34 500] isr_local  1601 proc_retcode_grm | errorcode =  0  
+[2018/08/17 10:04:34 511] isr_local  1979 grammar id:call  
+[2018/08/17 10:04:34 512] isr_local  1593 onGrmLocalServiceCb  0  call  
