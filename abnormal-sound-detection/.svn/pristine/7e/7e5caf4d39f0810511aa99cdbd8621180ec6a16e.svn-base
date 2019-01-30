@@ -1,0 +1,5 @@
+---- wake.dict Matches (4 in 1 files) ----
+Pocketsphinx.c (project\src\pocketsphinx\src\libpocketsphinx):    if (dictfile == NULL && file_exists(MODELDIR "wake.dict")) {
+Pocketsphinx.c (project\src\pocketsphinx\src\libpocketsphinx):        dictfile = MODELDIR "wake.dict";
+Pocketsphinx.c (project\src\pocketsphinx\src\libpocketsphinx):    if (dictfile == NULL && file_exists("/system/lib/wake.dict")) {
+Pocketsphinx.c (project\src\pocketsphinx\src\libpocketsphinx):        dictfile = "/system/lib/wake.dict";

@@ -1,0 +1,32 @@
+#include "log.h"
+
+int transparentMacroFunc(const char *file, const char *func, int line, const char *info)
+{
+    struct tm *t;
+    time_t tt;
+    time(&tt);
+    t = localtime(&tt);
+	printf("Time:%4d/%02d/%02d %02d:%02d:%02d, File:%15s, Func:%20s, Line:%4d, info: %s\n", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, file, func, line, info);
+	return 0;
+}
+
+int transparentMacroFuncVargs(const char *file, const char *func, int line, const char *fmt, ...)
+{
+	char buf[BUF_LEN];
+	memset(buf, 0, BUF_LEN);
+	va_list args;
+
+    struct tm *t;
+    time_t tt;
+    time(&tt);
+    t = localtime(&tt);
+
+	snprintf(buf, BUF_LEN, "Time:%4d/%02d/%02d %02d:%02d:%02d, File:%15s, Func:%20s, Line:%4d, info: ", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec, file, func, line);
+	va_start(args, fmt);
+	vsnprintf(buf + strlen(buf), BUF_LEN - strlen(buf), fmt, args);
+	va_end(args);
+
+	printf("%s\n", buf);
+
+	return 0;
+}
