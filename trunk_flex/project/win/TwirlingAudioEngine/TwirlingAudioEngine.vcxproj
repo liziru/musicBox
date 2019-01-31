@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\aec\aec.cpp" />
+    <ClCompile Include="..\..\src\aec\res.cpp" />
+    <ClCompile Include="..\..\src\ambisonic\ambisonic.cpp" />
+    <ClCompile Include="..\..\src\ambisonic\hxvxfromxxxx\h1v1fromobject.cpp" />
+    <ClCompile Include="..\..\src\ambisonic\hxvxfromxxxx\h1v1fromwyzx.cpp" />
+    <ClCompile Include="..\..\src\ambisonic\hxvxfromxxxx\hxvxfromxxxx.cpp" />
+    <ClCompile Include="..\..\src\ans\ans.cpp" />
+    <ClCompile Include="..\..\src\ans\beamforming.cpp" />
+    <ClCompile Include="..\..\src\ans\inverse.cpp" />
+    <ClCompile Include="..\..\src\api\TwirlingCapture.cpp" />
+    <ClCompile Include="..\..\src\automaticgaincontrol\automaticGainControl.cpp" />
+    <ClCompile Include="..\..\src\binaural\binaural.cpp" />
+    <ClCompile Include="..\..\src\bss\bss.cpp" />
+    <ClCompile Include="..\..\src\core\core.cpp" />
+    <ClCompile Include="..\..\src\core\micarray_core.cpp" />
+    <ClCompile Include="..\..\src\doa\localizer.cpp" />
+    <ClCompile Include="..\..\src\dynamicrangecontrol\dynamicRangeControl.cpp" />
+    <ClCompile Include="..\..\src\equalizer\equalizer.cpp" />
+    <ClCompile Include="..\..\src\fft\realFFT.cpp" />
+    <ClCompile Include="..\..\src\resample\resample.cpp" />
+    <ClCompile Include="..\..\src\sn3d\sn3d.cpp" />
+    <ClCompile Include="..\..\src\stereo\stereo.cpp" />
+    <ClCompile Include="..\..\src\upmix51\upmix51.cpp" />
+    <ClCompile Include="..\..\src\vad\vad.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\aec\aec.h" />
+    <ClInclude Include="..\..\src\aec\aecDefine.h" />
+    <ClInclude Include="..\..\src\aec\commonDefine.h" />
+    <ClInclude Include="..\..\src\aec\res.h" />
+    <ClInclude Include="..\..\src\aec\resDefine.h" />
+    <ClInclude Include="..\..\src\ambisonic\ambisonic.h" />
+    <ClInclude Include="..\..\src\ambisonic\ambisonicData.h" />
+    <ClInclude Include="..\..\src\ambisonic\ambisonicDef.h" />
+    <ClInclude Include="..\..\src\ambisonic\hxvxfromxxxx\h1v1fromobject.h" />
+    <ClInclude Include="..\..\src\ambisonic\hxvxfromxxxx\h1v1fromwyzx.h" />
+    <ClInclude Include="..\..\src\ambisonic\hxvxfromxxxx\hxvxfromxxxx.h" />
+    <ClInclude Include="..\..\src\ans\ans.h" />
+    <ClInclude Include="..\..\src\ans\beamforming.h" />
+    <ClInclude Include="..\..\src\ans\beamforming_table.h" />
+    <ClInclude Include="..\..\src\ans\beamforming_table_Respeaker.h" />
+    <ClInclude Include="..\..\src\ans\inverse.h" />
+    <ClInclude Include="..\..\src\api\TwirlingCapture.h" />
+    <ClInclude Include="..\..\src\automaticgaincontrol\agcDefines.h" />
+    <ClInclude Include="..\..\src\automaticgaincontrol\automaticGainControl.h" />
+    <ClInclude Include="..\..\src\binaural\binaural.h" />
+    <ClInclude Include="..\..\src\bss\bss.h" />
+    <ClInclude Include="..\..\src\bss\bssdefines.h" />
+    <ClInclude Include="..\..\src\core\core.h" />
+    <ClInclude Include="..\..\src\core\def.h" />
+    <ClInclude Include="..\..\src\core\micarray_core.h" />
+    <ClInclude Include="..\..\src\doa\localizer.h" />
+    <ClInclude Include="..\..\src\dynamicrangecontrol\dynamicRangeControl.h" />
+    <ClInclude Include="..\..\src\equalizer\equalizer.h" />
+    <ClInclude Include="..\..\src\fft\realFFT.h" />
+    <ClInclude Include="..\..\src\resample\resample.h" />
+    <ClInclude Include="..\..\src\sn3d\sn3d.h" />
+    <ClInclude Include="..\..\src\stereo\stereo.h" />
+    <ClInclude Include="..\..\src\upmix51\upmix51.h" />
+    <ClInclude Include="..\..\src\utils\cond.h" />
+    <ClInclude Include="..\..\src\vad\vad.h" />
+    <ClInclude Include="..\..\src\vad\vadDefines.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TwirlingAudioEngine.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{74047717-E4C7-49C8-9852-DB9B0A9865C6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TwirlingAudioEngine</RootNamespace>
+    <ProjectName>TwirlingCapture</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../../bin/win/$(Configuration)/$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../../bin/win/$(Configuration)/$(Platform)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;TWIRLINGAUDIOENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;TWIRLINGAUDIOENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;TWIRLINGAUDIOENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>../../../lib/win/$(Configuration)/$(Platform)/$(TargetName).lib</ImportLibrary>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;TWIRLINGAUDIOENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../include/win</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImportLibrary>../../../lib/win/$(Configuration)/$(Platform)/$(TargetName).lib</ImportLibrary>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

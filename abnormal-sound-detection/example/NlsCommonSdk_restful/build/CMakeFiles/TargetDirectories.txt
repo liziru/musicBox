@@ -1,6 +1,0 @@
-/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/build/CMakeFiles/edit_cache.dir
-/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/build/CMakeFiles/restfulAsrDemo.dir
-/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/build/CMakeFiles/restfulTtsDemo.dir
-/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/build/CMakeFiles/tokenDemo.dir
-/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/build/CMakeFiles/rebuild_cache.dir
-/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/build/CMakeFiles/fileTransDemo.dir

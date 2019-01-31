@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/fileTransDemo.dir/demo/fileTransDemo.cpp.o  -o ../demo/fileTransDemo  -L/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/lib/linux -Wl,-rpath,/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/lib/linux -lnlsCommonSdk -ljsoncpp -lssl -lcrypto -lcurl -luuid 

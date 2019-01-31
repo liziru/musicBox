@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/restfulTtsDemo.dir/demo/restfulTtsDemo.cpp.o  -o ../demo/restfulTtsDemo  -L/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/lib/linux -Wl,-rpath,/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/lib/linux -ljsoncpp -lcurl 

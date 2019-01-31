@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/tokenDemo.dir/demo/tokenDemo.cpp.o  -o ../demo/tokenDemo  -L/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/lib/linux -Wl,-rpath,/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/lib/linux -lnlsCommonSdk -ljsoncpp -lssl -lcrypto -lcurl -luuid 

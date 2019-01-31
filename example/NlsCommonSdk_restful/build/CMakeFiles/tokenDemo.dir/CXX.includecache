@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Global.h
+
+../include/Token.h
+Global.h
+../include/Global.h
+string
+-
+
+/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/demo/tokenDemo.cpp
+iostream
+-
+Token.h
+/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/demo/Token.h
+

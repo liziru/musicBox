@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/FileTrans.h
+string
+-
+Global.h
+../include/Global.h
+
+../include/Global.h
+
+/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/demo/fileTransDemo.cpp
+iostream
+-
+string
+-
+FileTrans.h
+/home/lee/Desktop/musicBox/abnormal-sound-detection/example/NlsCommonSdk_restful/demo/FileTrans.h
+windows.h
+-
+

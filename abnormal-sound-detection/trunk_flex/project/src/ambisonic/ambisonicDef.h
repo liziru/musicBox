@@ -1,6 +1,0 @@
-#ifndef __AMBISONIC_DEFINITIONS_H__
-#define __AMBISONIC_DEFINITIONS_H__
-
-
-
-#endif /*__AMBISONIC_DEFINITIONS_H__*/
