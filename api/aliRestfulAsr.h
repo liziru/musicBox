@@ -19,7 +19,7 @@ class Ali_RestfulASR
     ~Ali_RestfulASR();
 
     int process(const char *fileName);
-    int sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult);
+    static int sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult);
 
     /**
  * 一句话识别RESTful API HTTP请求的响应回调函数

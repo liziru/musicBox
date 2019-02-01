@@ -27,4 +27,4 @@ class TtsResult
     string getTtsVoiceFilename();
     FILE *getTtsVoiceFile();
 };
-#endif //__TTS_RESULT_H__
+#endif //__TTS_RESULT_H__  

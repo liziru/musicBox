@@ -51,7 +51,7 @@ size_t Ali_RestfulASR::responseCallback(void *ptr, size_t size, size_t nmemb, vo
     return len;
 }
 
-int Ali_RestfulASR::sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult)
+static int Ali_RestfulASR::sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult)
 {
     CURL *curl = NULL;
     CURLcode res;
@@ -183,6 +183,7 @@ Ali_RestfulASR::Ali_RestfulASR(/* args */)
     this->request = oss.str();
     cout << "request: " << request << endl;
 
+    
     delete aliTokenKeyRes;
 }
 
