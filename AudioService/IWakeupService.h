@@ -11,9 +11,7 @@
 
 using namespace std;
 
-#define DUMP_WAKEUP_DATA
-
-class IWakeupService: public AudioPreprocessListenner
+class IWakeupService : public AudioPreprocessListenner
 {
   public:
     IWakeupService(float wakeupThreshold, float wakeupPlp, float wakeupDmin, float wakeupDmax);
@@ -48,11 +46,12 @@ class IWakeupService: public AudioPreprocessListenner
     float wakeupDmax;
     pthread_cond_t dataArrivalCond;
     pthread_mutex_t dataArrivalMutex;
-        // 监听者列表
+    // 监听者列表
     list<WakeupListenner *> wakeupListenners;
     list<float> angles;
 #ifdef DUMP_WAKEUP_DATA
     vector<short> wakeupData;
+    FILE *dumpWakeupDataOutput;
     void pushBackWakeupData(short *data, const int count);
     void popFrontWakeupData(const int count);
 #endif
@@ -61,5 +60,4 @@ class IWakeupService: public AudioPreprocessListenner
     static void *m_wakeupProcess(void *p);
     static const int ANGLES_MIX_SIZE;
 };
-#endif  //__IWAKEUPSERVICE_H__
-
+#endif //__IWAKEUPSERVICE_H__

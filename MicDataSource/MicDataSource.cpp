@@ -248,6 +248,8 @@ void *MicDataSource::capture_process(void *p)
 	MicDataSource *micDataSource = (MicDataSource *)p;
 	micDataSource->isRun = true;
 	int err = 0;
+	static int flag = 0;
+
 	short *inputMicData16s = NULL;
 	inputMicData16s = (short *)malloc(sizeof(short) * FRAMELEN * micDataSource->channel);
 
@@ -291,6 +293,34 @@ void *MicDataSource::capture_process(void *p)
 				break;
 			}
 		}
+
+		// if (micDataSource->status == 1)
+		// { //save to asr
+		// 	macroFunc("capture: after wakeup, prepare save audio file to asr.");
+		// 	// struct timeval tv;
+		// 	// gettimeofday(&tv,NULL);
+		// 	// char *asrFile = "asrfile";
+		// 	if (0 == flag)
+		// 	{
+		// 		FILE *fpw;
+		// 		fpw = fopen(ASRFILE, "wb");
+		// 		if (!fpw)
+		// 		{
+		// 			macroFunc("capture: fopen failed.");
+		// 			exit(1);
+		// 		}
+		// 		flag=1;
+		// 	}
+
+		// 	fwrite(inputMicData16s, sizeof(short), FRAMELEN, fpw);
+		// 	fflush(fpw);
+		// 	// if (0 == flag)
+		// 	// {
+		// 	// 	fclose(fpw);
+		// 	// }
+
+		// 	continue;
+		// }
 		
 		if (0 == FIFO_AddOne(micDataSource->pfifo, inputMicData16s))
 		{

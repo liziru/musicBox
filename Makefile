@@ -1,7 +1,7 @@
 BIN_NAME = mozart
 CC = aarch64-linux-gnu-c++ -std=c++11
 CFLAGS = #-O2
-DBUG = -g
+DBUG = -g  #-DPRINT_TIME
 INCLUDE = -I./out/include/ -I./three -I./utils -I.  -I./logApi/ -I./PlayBackAudio/ -I./AudioService
 LD_FLAG = -L./out/lib
 LIBS = -lasound -lpthread -lTwirlingCapture -lTwirlingWakeupNN -lwiringPi -lcurl -lsqlite3 -llog4cpp

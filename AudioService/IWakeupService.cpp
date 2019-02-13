@@ -93,13 +93,14 @@ DeviceInfo selectDeviceInfo()
 }
 
 const int IWakeupService::ANGLES_MIX_SIZE = 20;
+
 IWakeupService::IWakeupService(float wakeupThreshold, float wakeupPlp, float wakeupDmin, float wakeupDmax)
     : wakeupThreshold(wakeupThreshold), wakeupPlp(wakeupPlp), wakeupDmin(wakeupDmin), wakeupDmax(wakeupDmax),
       th_wakeup(0), isRun(false), audioData(NULL), m_wakeup_obj(NULL)
 {
     pthread_cond_init(&this->dataArrivalCond, NULL);
     pthread_mutex_init(&this->dataArrivalMutex, NULL);
-    
+
     /** init wakeup object */
     int stride_len = MicDataSource::FRAMELEN;
     int chs = 1;
@@ -122,11 +123,26 @@ IWakeupService::IWakeupService(float wakeupThreshold, float wakeupPlp, float wak
         wakeupSet(m_wakeup_obj, detect_th);
     }
     // macroFuncVargs("twirlingwakeupNN version: %s \n", wakeupGetVersion());
+#ifdef DUMP_WAKEUP_DATA
+    dumpWakeupDataOutput = NULL;
+    if ((dumpWakeupDataOutput = fopen("./dump_wakeup_data.pcm", "wb+")) == NULL)
+    {
+        macroFunc("wakeup: cannot open dump_wakeup_data file for wakeup");
+        exit(1);
+    }
+#endif
 }
 
 IWakeupService::~IWakeupService()
 {
     isRun = false;
+#ifdef DUMP_WAKEUP_DATA
+    if (NULL != dumpWakeupDataOutput)
+    {
+        fclose(dumpWakeupDataOutput);
+        dumpWakeupDataOutput = NULL;
+    }
+#endif
 }
 
 void IWakeupService::addWakeupListenner(WakeupListenner *listenner)
@@ -212,28 +228,22 @@ void IWakeupService::onDataArrival(short *audioData, float angle)
         angles.pop_front();
     }
     angles.push_back(angle);
-#ifndef DUMP_WAKEUP_DATA
-    if (wakeupData.size() >= MicDataSource::FRAMELEN * ANGLES_MIX_SIZE)
-    {
-        popFrontWakeupData(MicDataSource::FRAMELEN);
-    }
-    pushBackWakeupData(audioData, MicDataSource::FRAMELEN);
-    // #ifdef DUMP_WAKEUP_DATA
-    FILE *dumpWakeupDataOutput = NULL;
-    if ((dumpWakeupDataOutput = fopen("./dump_wakeup_data.pcm", "wb")) == NULL)
-    {
-        macroFunc("wakeup: cannot open dump_wakeup_data file for wakeup");
-        exit(1);
-    }
-    vector<short>::iterator iter = wakeupData.begin();
-    for (; iter != wakeupData.end(); iter++)
-    {
-        fwrite(&(*iter), sizeof(short), 1, dumpWakeupDataOutput);
-    }
-    wakeupData.clear();
+#ifdef DUMP_WAKEUP_DATA
+    // if (wakeupData.size() >= MicDataSource::FRAMELEN * ANGLES_MIX_SIZE)
+    // {
+    //     popFrontWakeupData(MicDataSource::FRAMELEN);
+    // }
+    // pushBackWakeupData(audioData, MicDataSource::FRAMELEN);
+
+    // vector<short>::iterator iter = wakeupData.begin();
+    // for (; iter != wakeupData.end(); iter++)
+    // {
+    //     fwrite(&(*iter), sizeof(short), 1, dumpWakeupDataOutput);
+    // }
+    // wakeupData.clear();
+    fwrite(audioData, sizeof(short), MicDataSource::FRAMELEN, dumpWakeupDataOutput);
+    macroFuncVargs("IWakeupService::onDataArrival: fwrite data to file.");
     fflush(dumpWakeupDataOutput);
-    fclose(dumpWakeupDataOutput);
-// #endif
 #endif
     pthread_cond_signal(&dataArrivalCond);
 }

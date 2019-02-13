@@ -1,10 +1,15 @@
-#include "aliRestfulASR.h"
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include "curl/curl.h"
+#include "Ali_RestfulASR.h"
 #include "Ali_TokenkeyRes.h"
+
+using namespace std;
+
+const string Ali_RestfulASR::URL = "http://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/asr";
+const string Ali_RestfulASR::APPKEY = "mrGmd1DlpfGQ9aG3"; //<Appkey Id>
 
 #ifdef _WIN32
 string UTF8ToGBK(const string &strUTF8)
@@ -39,19 +44,19 @@ size_t Ali_RestfulASR::responseCallback(void *ptr, size_t size, size_t nmemb, vo
 
     size_t len = size * nmemb;
     char *pBuf = (char *)ptr;
-    this->response = string(pBuf, pBuf + len);
+    string response = string(pBuf, pBuf + len);
 #ifdef _WIN32
     this->response = UTF8ToGBK(this->response);
 #endif
 
-    *srResult += this->response;
-    cout << "current result: " << this->response << endl;
+    *srResult += response;
+    cout << "current result: " << response << endl;
     cout << "total result: " << *srResult << endl;
 
     return len;
 }
 
-static int Ali_RestfulASR::sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult)
+int Ali_RestfulASR::sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult)
 {
     CURL *curl = NULL;
     CURLcode res;
@@ -110,7 +115,7 @@ static int Ali_RestfulASR::sendAsrRequest(const char *request, const char *token
     /**
     * 设置HTTP请求的响应回调函数
     */
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, responseCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Ali_RestfulASR::responseCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, srResult);
 
     /**
@@ -138,7 +143,7 @@ int Ali_RestfulASR::process(const char *fileName)
     curl_global_init(CURL_GLOBAL_ALL);
 
     string srResult = "";
-    int ret = sendAsrRequest(this->request, this->tokenkey, fileName, &srResult);
+    int ret = sendAsrRequest(request.c_str(), tokenkey.c_str(), fileName, &srResult);
 
     curl_global_cleanup();
     return ret;
@@ -183,7 +188,6 @@ Ali_RestfulASR::Ali_RestfulASR(/* args */)
     this->request = oss.str();
     cout << "request: " << request << endl;
 
-    
     delete aliTokenKeyRes;
 }
 

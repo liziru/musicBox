@@ -1,11 +1,14 @@
-#include "Ali_TokenkeyRes.h"
 #include <iostream>
 #include "Token.h"
 #include <sys/time.h>
 #include "log.h"
+#include "Ali_TokenkeyRes.h"
 
 using namespace std;
 using namespace AlibabaNlsCommon;
+
+const string Ali_TokenkeyRes::keySecret = "tbRlbTYXpTqqLMkKGAuSeieYTBIAFv";
+const string keyId = "LTAIGEBTcWrw9aKm"; //<Appkey Id>
 
 bool Ali_TokenkeyRes::isTimeExpire()
 {
