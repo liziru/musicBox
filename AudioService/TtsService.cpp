@@ -28,10 +28,12 @@ void *TtsService::launchProcess(void *p)
     pthread_detach(pthread_self());
     digitalWrite(SPEAK_LED, HIGH);
     TtsService *ttsLauncher = (TtsService *)p;
-    macroFuncVargs("wakeup, angle:%f", angle);
+    int tmpAngle = (int)ttsLauncher->wakeupEvent->getAngle();
+#ifdef VERBOSE
+    macroFuncVargs("wakeup, angle:%f", tmpAngle);
+#endif //VERBOSE
 
     BaiduVoice *bdVoice = new BaiduVoice();
-    int tmpAngle = (int)ttsLauncher->wakeupEvent->getAngle();
     TtsResult *ttsResult = NULL;
 
     while (1)
@@ -40,7 +42,7 @@ void *TtsService::launchProcess(void *p)
         pthread_cond_wait(&cond, &mutex);
         Pthread_mutex_unlock(&mutex);
 
-        ttsResult = bdVoice->voiceTts(string("你好，我在。声源方向：") + to_string(angle) + string("度"));
+        ttsResult = bdVoice->voiceTts(string("你好，我在。声源方向：") + to_string(tmpAngle) + string("度"));
         if (ttsResult->getIsError())
         {
             macroFuncVargs("tts error:%s", ttsResult->getErrorMsg().c_str());
