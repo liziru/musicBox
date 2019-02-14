@@ -1,19 +1,26 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+
 #include "AudioPreprocessDispatcher.h"
 #include "TwirlingCapture.h"
 #include "log.h"
 #include "TwirlingVad.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/time.h>
 const float AudioPreprocessDispatcher::SCALE = 1.f / (float)(MAXABS16S);
-AudioPreprocessDispatcher::AudioPreprocessDispatcher(bool ansIsOn, bool drcIsOn, float ansDB, float digitalGain)
-    : ansIsOn(ansIsOn), drcIsOn(drcIsOn), ansDB(ansDB), digitalGain(digitalGain),
-      isRun(isRun), m_ans_obj(NULL), m_drc_obj(NULL), m_doa_obj(NULL),
-      micDataSource(NULL), th_dispatcher(0)
+string AudioPreprocessDispatcher::asrFileName = "";
+int AudioPreprocessDispatcher::APDLEVEL = 0;
+
+AudioPreprocessDispatcher::AudioPreprocessDispatcher(bool ansIsOn, bool drcIsOn, float ansDB, float digitalGain, MicDataSource *micDataSource)
+    : ansIsOn(ansIsOn), drcIsOn(drcIsOn), ansDB(ansDB), digitalGain(digitalGain), micDataSource(micDataSource),
+      isRun(isRun), m_ans_obj(NULL), m_drc_obj(NULL), m_doa_obj(NULL), th_dispatcher(0)
 
 {
+    this->sArray = (short *)malloc(sizeof(short) * MicDataSource::FRAMELEN * this->micDataSource->getChannel() * 500); //8s
+    this->pfifo = &this->fifo;
+    FIFO_Init(this->pfifo, sArray, sizeof(short) * MicDataSource::FRAMELEN * this->micDataSource->getChannel(), 500); //FIFO_BUFF_COUNT 750
 }
+
 AudioPreprocessDispatcher::~AudioPreprocessDispatcher()
 {
     if (NULL != m_ans_obj)
@@ -45,6 +52,55 @@ void AudioPreprocessDispatcher::dispatcherAudioData()
         pthread_create(&this->th_dispatcher, NULL, dispatcherThread, (void *)this);
     }
 }
+
+string AudioPreprocessDispatcher::getTimeStr()
+{
+    struct tm *t;
+    time_t tt;
+    time(&tt);
+    t = localtime(&tt);
+    char tmp[50] = {0};
+    sprintf(tmp, "%4d_%02d_%02d-%02d_%02d_%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+    return string(tmp);
+}
+
+int AudioPreprocessDispatcher::writeBuffToFile(string &pcmFileName, void *p)
+{
+    short inputData16s[MicDataSource::FRAMELEN];
+    FILE *pcmOutput = NULL;
+    int i;
+    int rd;
+    AudioPreprocessDispatcher *dispatcher = (AudioPreprocessDispatcher *)p;
+
+    // string tmp = getTimeStr();
+    // sprintf(pcmFileName, "./data/pcm/voice_%s.raw", tmp.c_str());
+    pcmFileName = "/home/pi/workspace/data/asrAudio/voice_" + getTimeStr() + ".raw";
+#ifdef VERBOSE
+    macroFuncVargs(" AudioPreprocessDispatcher::writeBuffToFile : pcmFileName (%s),fifo_counter (%d)", pcmFileName.c_str(), dispatcher->pfifo->Counter);
+#endif //VERBOSE
+
+    if ((pcmOutput = fopen(pcmFileName.c_str(), "wb")) == NULL)
+    {
+        macroFunc("cannot open voice file for recording");
+        return -1;
+    }
+
+    for (; dispatcher->pfifo->Counter > 0;)
+    {
+        if (0 == FIFO_GetOne(dispatcher->pfifo, inputData16s))
+        {
+            macroFunc("FIFO_GetOne is error, buffer is empty.");
+            return -2;
+        }
+        fwrite(inputData16s, sizeof(short), MicDataSource::FRAMELEN, pcmOutput);
+    }
+    fflush(pcmOutput);
+    fsync(fileno(pcmOutput));
+    fclose(pcmOutput);
+
+    return 0;
+}
+
 void *AudioPreprocessDispatcher::dispatcherThread(void *p)
 {
     AudioPreprocessDispatcher *dispatcher = (AudioPreprocessDispatcher *)p;
@@ -56,6 +112,7 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
     float inputMicData32f[MicDataSource::FRAMELEN];
     float outputData32f[MicDataSource::FRAMELEN];
     short outData16s[MicDataSource::FRAMELEN];
+    short tmpData16s[MicDataSource::FRAMELEN];
     short *inputMicData16s = (short *)malloc(sizeof(short) * MicDataSource::FRAMELEN * dispatcher->micDataSource->getChannel());
     float *rawMicData32f = (float *)malloc(sizeof(float) * MicDataSource::FRAMELEN * dispatcher->micDataSource->getChannel());
     dispatcher->isRun = true;
@@ -68,12 +125,12 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
     //vad init
     int currVadRs = 1;
     int prevVadRs = 1;
-    int beginCounter = 0;
-    int endCounter = 0;
+    // int beginCounter = 0;
+    // int endCounter = 0;
     bool isStartSpeak = false;
     bool isInSpeak = false;
     bool isEndSpeak = false;
-    int processFlag = 0;
+    bool resetFlag = false;
     TwirlingVad *m_vad = new TwirlingVad(MicDataSource::FRAMELEN, dispatcher->micDataSource->getRate());
 
 #ifdef PRINT_TIME
@@ -98,11 +155,10 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
         if (!dispatcher->micDataSource->getDataPackage(inputMicData16s))
         {
             // macroFunc("wakeup: buf_read fail, buffer is empty.");
-            usleep(10000);
+            usleep(100);
             continue;
         }
-        // process audio data
-        // to float 32
+
         for (int i = 0; i < MicDataSource::FRAMELEN * dispatcher->micDataSource->getChannel(); i++)
         {
             rawMicData32f[i] = (float)inputMicData16s[i] * SCALE;
@@ -127,24 +183,21 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
         {
             inputMicData32f[i] = (float)rawMicData32f[i * dispatcher->micDataSource->getChannel()] * dispatcher->digitalGain;
         }
-        /** copy data */
-        memcpy(outputData32f, inputMicData32f, MicDataSource::FRAMELEN * sizeof(float));
 
-        if (processFlag)
+        if (resetFlag)
         {
             currVadRs = 0;
             prevVadRs = 0;
             isInSpeak = false;
             isEndSpeak = false;
             isStartSpeak = false;
-            processFlag = 0;
-            // macroFunc("back to default.");
+            resetFlag = false;
         }
 
         //my vad
         m_vad->process(outputData32f);
         currVadRs = m_vad->getState();
-        macroFuncVargs("dispatcherThread: vad getstatus, currVadRs=%d,prevVadRs=%d\n", currVadRs, prevVadRs);
+        // macroFuncVargs("dispatcherThread: vad getstatus, currVadRs=%d,prevVadRs=%d\n", currVadRs, prevVadRs);
 
         if (dispatcher->ansIsOn)
         {
@@ -165,93 +218,108 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
             macroFunc("dispatcherThread: drc is on.");
         }
 
-        //vad starts.
-        if (currVadRs == 1 || currVadRs == 2)
+        if (!(dispatcher->drcIsOn || dispatcher->ansIsOn))
         {
-            currVadRs = 1;
-        }
-        else if (currVadRs == 3)
-        {
-            currVadRs = 0;
+            // macroFunc("dispatcherThread:  output the raw pcm.");
+            memcpy(outputData32f, inputMicData32f, MicDataSource::FRAMELEN * sizeof(float));
         }
 
-        if (currVadRs == 0 && prevVadRs == 0)
+        /** Convert input data from 32f to 16s. */
+        for (int i = 0; i < MicDataSource::FRAMELEN; i++)
         {
-            // if (param->pfifo->Counter < param->beginHangover)
-            // {
-            //     // FIFO_AddOne(param->pfifo, outData16s);
-            // }
-            // else
-            // {
-            //     // FIFO_GetOne(param->pfifo, tmpData16s);
-            //     FIFO_AddOne(param->pfifo, outData16s);
-            // }
-
-            isInSpeak = false;
-            isEndSpeak = false;
-            isStartSpeak = false;
-        }
-        else if (currVadRs == 1 && prevVadRs == 0) //begin
-        {
-            isInSpeak = true;
-            isEndSpeak = false;
-            isStartSpeak = true;
-        }
-        else if (currVadRs == 1 && prevVadRs == 1) //in speak
-        {
-            isInSpeak = true;
-            isEndSpeak = false;
-            isStartSpeak = false;
-        }
-        else if (currVadRs == 0 && prevVadRs == 1) //end
-        {
-            isInSpeak = false;
-            isEndSpeak = true;
-            isStartSpeak = false;
-        }
-
-        if ((isInSpeak && !isEndSpeak) || isEndSpeak) //有人说话时
-        {
-
-            /** Convert input data from 32f to 16s. */
-            for (int i = 0; i < MicDataSource::FRAMELEN; i++)
+            int val = (int)(outputData32f[i] * (float)AudioPreprocessDispatcher::MAXABS16S);
+            if (val > (int)AudioPreprocessDispatcher::MAX16S)
             {
-                int val = (int)(outputData32f[i] * (float)AudioPreprocessDispatcher::MAXABS16S);
-                if (val > (int)AudioPreprocessDispatcher::MAX16S)
-                {
-                    outData16s[i] = AudioPreprocessDispatcher::MAX16S;
-                }
-                else if (val < (int)AudioPreprocessDispatcher::MIN16S)
-                {
-                    outData16s[i] = AudioPreprocessDispatcher::MIN16S;
-                }
-                else
-                {
-                    outData16s[i] = (short)val;
-                }
+                outData16s[i] = AudioPreprocessDispatcher::MAX16S;
             }
+            else if (val < (int)AudioPreprocessDispatcher::MIN16S)
+            {
+                outData16s[i] = AudioPreprocessDispatcher::MIN16S;
+            }
+            else
+            {
+                outData16s[i] = (short)val;
+            }
+        }
 
+        if (APDLEVEL == 0) //awakeup process
+        {
             // dispatcher audio data
             list<AudioPreprocessListenner *>::iterator it = dispatcher->audioPreprocessListenners.begin();
             for (; it != dispatcher->audioPreprocessListenners.end(); ++it)
             {
                 (*it)->onDataArrival(outData16s, angle);
             }
-
-            macroFunc("dispatcherThread: display audio data to wakeup process.");
+            macroFunc("AudioPreprocessDispatcher::dispatcherThread: display audio data to wakeup process.");
         }
+        else if (AudioPreprocessDispatcher::APDLEVEL == 1) //vad to save file to asr.
+        {
+            //vad starts.
+            if (currVadRs == 1 || currVadRs == 2)
+            {
+                currVadRs = 1;
+            }
+            else if (currVadRs == 3)
+            {
+                currVadRs = 0;
+            }
 
-        prevVadRs = currVadRs;
-        // macroFuncVargs("2  currVadRs=%d,prevVadRs=%d\n", currVadRs, prevVadRs);
+            if (currVadRs == 0 && prevVadRs == 0)
+            {
+                if (dispatcher->pfifo->Counter < 15)
+                {
+                    FIFO_AddOne(dispatcher->pfifo, outData16s);
+                }
+                else
+                {
+                    FIFO_GetOne(dispatcher->pfifo, tmpData16s);
+                    FIFO_AddOne(dispatcher->pfifo, outData16s);
+                }
 
-        if (isEndSpeak)
-            processFlag = 1;
+                isInSpeak = false;
+                isEndSpeak = false;
+                isStartSpeak = false;
+            }
+            else if (currVadRs == 1 && prevVadRs == 0) //begin
+            {
+                isInSpeak = true;
+                isEndSpeak = false;
+                isStartSpeak = true;
+                // digitalPull(SPEAK_LED, HIGH);
+            }
+            else if (currVadRs == 1 && prevVadRs == 1) //in speak
+            {
+                isInSpeak = true;
+                isEndSpeak = false;
+                isStartSpeak = false;
+            }
+            else if (currVadRs == 0 && prevVadRs == 1) //end
+            {
+                isInSpeak = false;
+                isEndSpeak = true;
+                isStartSpeak = false;
+                // digitalPull(SPEAK_LED, LOW);
+            }
+
+            if (isInSpeak && !isEndSpeak) //有人说话时
+            {
+                FIFO_AddOne(dispatcher->pfifo, outData16s);
+            }
+
+            prevVadRs = currVadRs;
+
+            if (isEndSpeak)
+            {
+                resetFlag = true;
+                writeBuffToFile(asrFileName, dispatcher);
+                macroFuncVargs("AudioPreprocessDispatcher::dispatcherThread: ready to asr (%s).", asrFileName.c_str());
+            }
+        }
 
 #ifdef DUMP_PROCESS_PCM_DATA
         fwrite(outData16s, sizeof(short), MicDataSource::FRAMELEN, dumpProcessOutput);
         fflush(dumpProcessOutput);
 #endif
-
 #ifdef PRINT_TIME
         gettimeofday(&us2, NULL);
         macroFuncVargs("TWIR_TIME=%u", ((us2.tv_sec * 1000000 + us2.tv_usec) - (us1.tv_sec * 1000000 + us1.tv_usec)));

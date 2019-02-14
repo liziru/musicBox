@@ -8,8 +8,11 @@
 #include <pthread.h>
 #include <list>
 #include <vector>
+#include <stdio.h>
 
 using namespace std;
+
+#define DUMP_WAKEUP_DATA
 
 class IWakeupService : public AudioPreprocessListenner
 {
@@ -49,9 +52,10 @@ class IWakeupService : public AudioPreprocessListenner
     // 监听者列表
     list<WakeupListenner *> wakeupListenners;
     list<float> angles;
+    FILE *dumpWakeupDataOutput;
+
 #ifdef DUMP_WAKEUP_DATA
     vector<short> wakeupData;
-    FILE *dumpWakeupDataOutput;
     void pushBackWakeupData(short *data, const int count);
     void popFrontWakeupData(const int count);
 #endif

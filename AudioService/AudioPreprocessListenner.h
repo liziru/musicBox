@@ -3,7 +3,7 @@
 class AudioPreprocessListenner
 {
   public:
-    virtual void onDataArrival(short *audioData, float angle) = 0;
+    virtual void onDataArrival(short *audioData, float angle) = 0;//纯虚函数
     virtual inline ~AudioPreprocessListenner() {}
 };
 #endif

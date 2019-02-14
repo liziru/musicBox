@@ -128,6 +128,7 @@ IWakeupService::IWakeupService(float wakeupThreshold, float wakeupPlp, float wak
     if ((dumpWakeupDataOutput = fopen("./dump_wakeup_data.pcm", "wb+")) == NULL)
     {
         macroFunc("wakeup: cannot open dump_wakeup_data file for wakeup");
+        dumpWakeupDataOutput = NULL;
         exit(1);
     }
 #endif
@@ -220,9 +221,9 @@ void IWakeupService::popFrontWakeupData(const int count)
 }
 #endif
 
-void IWakeupService::onDataArrival(short *audioData, float angle)
+void IWakeupService::onDataArrival(short *inputAudioData, float angle)
 {
-    memcpy(getAudioDataAddr(), audioData, MicDataSource::FRAMELEN * sizeof(short));
+    memcpy(getAudioDataAddr(), inputAudioData, MicDataSource::FRAMELEN * sizeof(short));
     if (angles.size() >= ANGLES_MIX_SIZE)
     {
         angles.pop_front();
@@ -233,7 +234,7 @@ void IWakeupService::onDataArrival(short *audioData, float angle)
     // {
     //     popFrontWakeupData(MicDataSource::FRAMELEN);
     // }
-    // pushBackWakeupData(audioData, MicDataSource::FRAMELEN);
+    // pushBackWakeupData(inputAudioData, MicDataSource::FRAMELEN);
 
     // vector<short>::iterator iter = wakeupData.begin();
     // for (; iter != wakeupData.end(); iter++)
@@ -241,7 +242,7 @@ void IWakeupService::onDataArrival(short *audioData, float angle)
     //     fwrite(&(*iter), sizeof(short), 1, dumpWakeupDataOutput);
     // }
     // wakeupData.clear();
-    fwrite(audioData, sizeof(short), MicDataSource::FRAMELEN, dumpWakeupDataOutput);
+    fwrite(inputAudioData, sizeof(short), MicDataSource::FRAMELEN, dumpWakeupDataOutput);
     macroFuncVargs("IWakeupService::onDataArrival: fwrite data to file.");
     fflush(dumpWakeupDataOutput);
 #endif
@@ -281,18 +282,19 @@ void *IWakeupService::m_wakeupProcess(void *p)
         // int wakeupStatus = 0;
         if (wakeupStatus == -1)
         {
-            printf("Wakeup processing failed!\n");
+            macroFunc("Wakeup processing failed!\n");
         }
         else if (wakeupStatus == 1)
         {
+            AudioPreprocessDispatcher::APDLEVEL = 2;
+            macroFunc("\n=============Wakeup!   Change AudioPreprocessDispatcher::APDLEVEL status to 2 (waiting status.).\n");
+
             list<WakeupListenner *>::iterator it = wakeupService->wakeupListenners.begin();
             for (; it != wakeupService->wakeupListenners.end(); ++it)
             {
                 wakeupEvent->setAngle(wakeupService->calcWakeupAngle());
-                // wakeupEvent.set
                 (*it)->onWakeup(wakeupEvent); //LedService::onWakeup(WakeupEvent *wakeupEvent){
             }
-            printf("\n=============Wakeup! \n");
         }
     }
 

@@ -15,7 +15,7 @@ using namespace std;
 class AudioPreprocessDispatcher
 {
   public:
-    AudioPreprocessDispatcher(bool ansIsOn, bool drcIsOn, float ansDB, float digitalGain);
+    AudioPreprocessDispatcher(bool ansIsOn, bool drcIsOn, float ansDB, float digitalGain, MicDataSource *micDataSource);
     ~AudioPreprocessDispatcher();
     /**
      * 注册mic数据源
@@ -45,6 +45,12 @@ class AudioPreprocessDispatcher
     static const short MIN16S = -32768;
     static const int MAXABS16S = 32768;
 
+    static int APDLEVEL;
+
+    static int writeBuffToFile(string &pcmFileName, void *p);
+    static string getTimeStr();
+    static string asrFileName;
+
   private:
     // mic 数据源
     MicDataSource *micDataSource;
@@ -61,9 +67,9 @@ class AudioPreprocessDispatcher
     // 数字增益倍数
     float digitalGain;
     // ans处理对象
-	void *m_ans_obj;
+    void *m_ans_obj;
     // drc处理对象
-	void *m_drc_obj;
+    void *m_drc_obj;
     // doa处理对象
     void *m_doa_obj;
     // 分发线程
@@ -71,5 +77,9 @@ class AudioPreprocessDispatcher
     // 转换精度
     static const float SCALE;
     static void *dispatcherThread(void *p);
+
+    short *sArray;
+    FIFO_Type fifo;
+    FIFO_Type *pfifo;
 };
 #endif

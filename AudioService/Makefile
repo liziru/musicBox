@@ -1,5 +1,5 @@
 CC = aarch64-linux-gnu-c++
-CFLAGS = -std=c++11 -DDUMP_WAKEUP_DATA #-O2
+CFLAGS = -std=c++11 -DVERBOSE #-DDUMP_WAKEUP_DATA #-O2
 DBUG = -g 
 INCLUDE = -I../out/include/ -I../three -I../utils -I.. -I. -I../api/  -I../logApi/
 LD_FLAG = -L../out/lib

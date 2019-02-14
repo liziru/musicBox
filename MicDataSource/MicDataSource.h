@@ -12,7 +12,7 @@ class MicDataSource //类声明
    /**
      * 一次读取的音频帧数 为一包
      */
-   static const int FRAMELEN = 512;
+   static const int FRAMELEN = 256;
    /**
      * FIFO 队列中保存数据包的个数
      */
