@@ -293,6 +293,7 @@ void *IWakeupService::m_wakeupProcess(void *p)
             for (; it != wakeupService->wakeupListenners.end(); ++it)
             {
                 wakeupEvent->setAngle(wakeupService->calcWakeupAngle());
+                wakeupEvent->setWord("");
                 (*it)->onWakeup(wakeupEvent); //LedService::onWakeup(WakeupEvent *wakeupEvent){
             }
         }

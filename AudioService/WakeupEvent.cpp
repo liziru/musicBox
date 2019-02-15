@@ -22,3 +22,12 @@ string WakeupEvent::getWord()
 {
     return this->word;
 }
+
+void WakeupEvent::setAsrFileName(string fileName)
+{
+    this->asrFileName = fileName;
+}
+string WakeupEvent::getAsrFileName()
+{
+    return this->asrFileName;
+}

@@ -5,6 +5,7 @@
 #include "curl/curl.h"
 #include "Ali_RestfulASR.h"
 #include "Ali_TokenkeyRes.h"
+#include "log.h"
 
 using namespace std;
 
@@ -149,11 +150,11 @@ int Ali_RestfulASR::process(const char *fileName)
     return ret;
 }
 
-Ali_RestfulASR::Ali_RestfulASR(/* args */)
+Ali_RestfulASR::Ali_RestfulASR(string tokenId)
 {
-    Ali_TokenkeyRes *aliTokenKeyRes = new Ali_TokenkeyRes();
-    this->tokenkey = aliTokenKeyRes->getTokenId();
-
+    // Ali_TokenkeyRes *aliTokenKeyRes = new Ali_TokenkeyRes();
+    // this->tokenkey = aliTokenKeyRes->getTokenId();
+    this->tokenkey = tokenId;
     string format = "pcm";
     int sampleRate = 16000;
     bool enablePunctuationPrediction = true;
@@ -188,9 +189,10 @@ Ali_RestfulASR::Ali_RestfulASR(/* args */)
     this->request = oss.str();
     cout << "request: " << request << endl;
 
-    delete aliTokenKeyRes;
+    // delete aliTokenKeyRes;
 }
 
 Ali_RestfulASR::~Ali_RestfulASR()
 {
+    
 }

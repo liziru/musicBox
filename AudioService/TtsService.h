@@ -4,20 +4,17 @@
 #include "WakeupListenner.h"
 #include <pthread.h>
 #include <string>
-#include "AudioPreprocessAsrListenner.h"
 using namespace std;
 
-class TtsService : public AudioPreprocessAsrListenner
+class TtsService : public WakeupListenner
 {
 public:
-  TtsService(WakeupEvent *wakeupEvent);
+  TtsService();
   ~TtsService();
   void run();
-  void onDataArrival(string word, float angle);
+  void onWakeup(WakeupEvent *wakeupEvent);
 
 private:
-  int angle;
-  string word;
   pthread_t launchThread;
   WakeupEvent *wakeupEvent;
   static void *launchProcess(void *p);

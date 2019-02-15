@@ -26,6 +26,7 @@
 #include "gpio.h"
 // #include "PlayBackAudio.h"
 #include "AsrService.h"
+#include "TtsService.h"
 
 using namespace std;
 
@@ -39,18 +40,22 @@ int main(int argc, char *argv[])
 	MicDataSource *micDataSource = MicDataSource::getInstance(string("hw:0"), 16000, 1, SND_PCM_FORMAT_S16_LE, 1, 4, 0.06);
 	// PlayBackAudio *playBackAudio = PlayBackAudio::getInstance(string("hw:0"), 16000, 1, SND_PCM_FORMAT_S16_LE, 1, 4, 0.06);
 	AsrService *asrService = new AsrService();
+	TtsService *ttsService = new TtsService();
+
 	IWakeupService *iWakeupService = new IWakeupService(1e-15, 1e-1, 300, 2000);
 	AudioPreprocessDispatcher *audioPreprocessDispatcher = new AudioPreprocessDispatcher(false, false, -15, 1, micDataSource);
 	LedService *ledService = new LedService(1, HIGH, 1500);
 
 	// audioPreprocessDispatcher->setMicDataSource(micDataSource);
 	audioPreprocessDispatcher->addAudioPreprocessListenner((AudioPreprocessListenner *)iWakeupService);
+	audioPreprocessDispatcher->addAudioPreprocessAsrListenner((AudioPreprocessAsrListenner *)asrService);
 	audioPreprocessDispatcher->dispatcherAudioData();
 
 	iWakeupService->addWakeupListenner((WakeupListenner *)ledService);
 	// iWakeupService->addWakeupListenner((WakeupListenner *)playBackAudio);
-	iWakeupService->addWakeupListenner((WakeupListenner *)asrService);
+	iWakeupService->addWakeupListenner((WakeupListenner *)ttsService);
 
+	ttsService->run();
 	asrService->run();
 	iWakeupService->run();
 	ledService->run();
@@ -60,7 +65,7 @@ int main(int argc, char *argv[])
 		sleep(1);
 	}
 
-	delete asrService;
+	delete ttsService;
 	delete iWakeupService;
 	delete audioPreprocessDispatcher;
 

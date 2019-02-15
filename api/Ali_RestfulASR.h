@@ -18,7 +18,7 @@ private:
   static const string APPKEY; //<Appkey Id>
 
 public:
-  Ali_RestfulASR(/* args */);
+  Ali_RestfulASR(string tokenId);
   ~Ali_RestfulASR();
 
   int sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult);

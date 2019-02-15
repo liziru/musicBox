@@ -5,7 +5,7 @@
 #include "gpio.h"
 #include "AudioPreprocessDispatcher.h"
 
-TtsService::TtsService() : launchThread(0), wakeupEvent(NULL)
+TtsService::TtsService()
 {
     this->wakeupEvent = new WakeupEvent();
     this->wakeupEvent->setAngle(0);
@@ -28,27 +28,38 @@ void *TtsService::launchProcess(void *p)
     pthread_detach(pthread_self());
     digitalWrite(SPEAK_LED, HIGH);
     TtsService *ttsLauncher = (TtsService *)p;
-    int tmpAngle = (int)ttsLauncher->wakeupEvent->getAngle();
+    int tmpAngle = 0;
+    (int)ttsLauncher->wakeupEvent->getAngle();
 #ifdef VERBOSE
     macroFuncVargs("wakeup, angle:%f", tmpAngle);
 #endif //VERBOSE
 
     BaiduVoice *bdVoice = new BaiduVoice();
     TtsResult *ttsResult = NULL;
+    string wordContent;
 
     while (1)
     {
-        pthread_mutex_lock(&mutex);
-        pthread_cond_wait(&cond, &mutex);
-        Pthread_mutex_unlock(&mutex);
+        pthread_mutex_lock(&ttsLauncher->mutex);
+        pthread_cond_wait(&ttsLauncher->cond, &ttsLauncher->mutex);
+        pthread_mutex_unlock(&ttsLauncher->mutex);
 
-        ttsResult = bdVoice->voiceTts(string("你好，我在。声源方向：") + to_string(tmpAngle) + string("度"));
+        if (ttsLauncher->wakeupEvent->getWord().length() == 0)
+        {
+            tmpAngle = (int)ttsLauncher->wakeupEvent->getAngle();
+            wordContent = string("你好，我在。声源方向：") + to_string(tmpAngle) + string("度");
+        }
+        else
+            wordContent = ttsLauncher->wakeupEvent->getWord();
+
+        ttsResult = bdVoice->voiceTts(wordContent);
         if (ttsResult->getIsError())
         {
             macroFuncVargs("tts error:%s", ttsResult->getErrorMsg().c_str());
         }
         else
         {
+            // macroFuncVargs("TtsService::laun chProcess: mpg123 filename(%s)", ttsResult->getTtsVoiceFilename().c_str());
             string cmd = string("mpg123 " + ttsResult->getTtsVoiceFilename());
             system(cmd.c_str());
         }
@@ -63,10 +74,10 @@ void *TtsService::launchProcess(void *p)
     return NULL;
 }
 
-void TtsService::onDataArrival(string word, float angle)
+void TtsService::onWakeup(WakeupEvent *wakeupEvent)
 {
-    this->wakeupEvent->setAngle(angle);
-    this->wakeupEvent->setWord(word);
+    this->wakeupEvent->setAngle(wakeupEvent->getAngle());
+    this->wakeupEvent->setWord(wakeupEvent->getWord());
 
     pthread_cond_signal(&cond);
 }

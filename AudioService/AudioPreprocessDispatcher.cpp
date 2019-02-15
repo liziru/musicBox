@@ -3,6 +3,7 @@
 #include <sys/time.h>
 
 #include "AudioPreprocessDispatcher.h"
+#include "AudioPreprocessAsrListenner.h"
 #include "TwirlingCapture.h"
 #include "log.h"
 #include "TwirlingVad.h"
@@ -313,6 +314,16 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
                 resetFlag = true;
                 writeBuffToFile(asrFileName, dispatcher);
                 macroFuncVargs("AudioPreprocessDispatcher::dispatcherThread: ready to asr (%s).", asrFileName.c_str());
+
+                WakeupEvent *wakeupEvent = new WakeupEvent();
+                wakeupEvent->setAsrFileName(asrFileName);
+                list<AudioPreprocessAsrListenner *>::iterator it = dispatcher->audioPreprocessAsrListenners.begin();
+                for (; it != dispatcher->audioPreprocessAsrListenners.end(); ++it)
+                {
+                    (*it)->onDataArrival(wakeupEvent);
+                }
+                // macroFunc("AudioPreprocessDispatcher::dispatcherThread: display audio data to wakeup process.");
+                delete wakeupEvent;
             }
         }
 
@@ -351,6 +362,16 @@ void AudioPreprocessDispatcher::removeAudioPreprocessListenner(AudioPreprocessLi
 {
     this->audioPreprocessListenners.remove(listenner);
 }
+
+void AudioPreprocessDispatcher::addAudioPreprocessAsrListenner(AudioPreprocessAsrListenner *listenner)
+{
+    this->audioPreprocessAsrListenners.push_back(listenner);
+}
+void AudioPreprocessDispatcher::removeAudioPreprocessAsrListenner(AudioPreprocessAsrListenner *listenner)
+{
+    this->audioPreprocessAsrListenners.remove(listenner);
+}
+
 bool AudioPreprocessDispatcher::getIsRun()
 {
     return this->isRun;

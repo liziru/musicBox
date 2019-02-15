@@ -3,6 +3,8 @@
 #include <sys/time.h>
 #include "log.h"
 #include "Ali_TokenkeyRes.h"
+#include "curl/curl.h"
+#include "Token.h"
 
 using namespace std;
 using namespace AlibabaNlsCommon;

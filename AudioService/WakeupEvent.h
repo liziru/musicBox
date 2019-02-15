@@ -11,9 +11,12 @@ public:
   void setAngle(float angle);
   void setWord(string word);
   string getWord();
+  void setAsrFileName(string fileName);
+  string getAsrFileName();
 
 private:
   float angle;
   string word;
+  string asrFileName;
 };
 #endif //__WAKEUP_EVENT_H__
