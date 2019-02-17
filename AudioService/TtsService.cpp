@@ -62,6 +62,8 @@ void *TtsService::launchProcess(void *p)
             // macroFuncVargs("TtsService::laun chProcess: mpg123 filename(%s)", ttsResult->getTtsVoiceFilename().c_str());
             string cmd = string("mpg123 " + ttsResult->getTtsVoiceFilename());
             system(cmd.c_str());
+            AudioPreprocessDispatcher::APDLEVEL = 1; //record
+            macroFunc(" ## Start to record.");
         }
     }
 
