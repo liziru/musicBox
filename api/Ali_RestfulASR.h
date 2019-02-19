@@ -13,14 +13,15 @@ private:
   string fileName;
   string request;
   string response;
-  string finalRes;
+  // string finalRes;
   static const string URL;
   static const string APPKEY; //<Appkey Id>
+  string srResult;
 
 public:
   Ali_RestfulASR(string tokenId);
   ~Ali_RestfulASR();
-
+  string getFinalRes();
   int sendAsrRequest(const char *request, const char *token, const char *fileName, string *srResult);
 
   int process(const char *fileName);

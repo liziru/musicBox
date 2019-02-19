@@ -18,6 +18,7 @@ TtsService::~TtsService()
     pthread_cond_destroy(&cond);
     pthread_mutex_destroy(&mutex);
     delete wakeupEvent;
+    wakeupEvent = NULL;
 }
 void TtsService::run()
 {
@@ -62,6 +63,7 @@ void *TtsService::launchProcess(void *p)
             // macroFuncVargs("TtsService::laun chProcess: mpg123 filename(%s)", ttsResult->getTtsVoiceFilename().c_str());
             string cmd = string("mpg123 " + ttsResult->getTtsVoiceFilename());
             system(cmd.c_str());
+            // sleep(1);
             AudioPreprocessDispatcher::APDLEVEL = 1; //record
             macroFunc(" ## Start to record.");
         }

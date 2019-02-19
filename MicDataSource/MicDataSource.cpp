@@ -321,7 +321,7 @@ void *MicDataSource::capture_process(void *p)
 
 		// 	continue;
 		// }
-		
+
 		if (0 == FIFO_AddOne(micDataSource->pfifo, inputMicData16s))
 		{
 			macroFunc("capture: buf_write fail, buffer is full.");
@@ -354,4 +354,9 @@ void *MicDataSource::capture_process(void *p)
 		micDataSource->sArray = NULL;
 	}
 	return NULL;
+}
+
+int MicDataSource::emptyFifo()
+{
+	return FIFO_DelAdd(pfifo, 6);
 }

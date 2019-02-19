@@ -143,8 +143,8 @@ int Ali_RestfulASR::process(const char *fileName)
     // 全局只初始化一次
     curl_global_init(CURL_GLOBAL_ALL);
 
-    string srResult = "";
     int ret = sendAsrRequest(request.c_str(), tokenkey.c_str(), fileName, &srResult);
+    macroFuncVargs("Ali_RestfulASR::process: Final res(%s)", this->srResult.c_str());
 
     curl_global_cleanup();
     return ret;
@@ -194,5 +194,9 @@ Ali_RestfulASR::Ali_RestfulASR(string tokenId)
 
 Ali_RestfulASR::~Ali_RestfulASR()
 {
-    
+}
+
+string Ali_RestfulASR::getFinalRes()
+{
+    return srResult;
 }

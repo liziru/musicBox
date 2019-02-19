@@ -13,10 +13,13 @@ public:
   string getWord();
   void setAsrFileName(string fileName);
   string getAsrFileName();
+  string getAsrRes();
+  void setAsrRes(string res);
 
 private:
   float angle;
   string word;
   string asrFileName;
+  string asrRes;
 };
 #endif //__WAKEUP_EVENT_H__

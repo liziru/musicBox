@@ -31,3 +31,11 @@ string WakeupEvent::getAsrFileName()
 {
     return this->asrFileName;
 }
+string WakeupEvent::getAsrRes()
+{
+    return asrRes;
+}
+void WakeupEvent::setAsrRes(string res)
+{
+    this->asrRes = res;
+}

@@ -1,6 +1,7 @@
 #include "AsrService.h"
 #include "log.h"
 #include "Ali_RestfulASR.h"
+#include "AudioPreprocessDispatcher.h"
 
 AsrService::AsrService()
     : isRun(false), th_asr(0), wakeupEvent(NULL)
@@ -41,7 +42,7 @@ void *AsrService::asrProcess(void *p)
     pthread_detach(pthread_self());
     AsrService *asrService = (AsrService *)p;
     asrService->isRun = true;
-    Ali_RestfulASR *asrLauncher = new Ali_RestfulASR("841dd91f814c46dcb558402e4844e00d"); //tokenkey
+    Ali_RestfulASR *asrLauncher = new Ali_RestfulASR("74e6605ac2c942a9abaaae3f33419261"); //tokenkey
 
     while (asrService->isRun)
     {
@@ -50,7 +51,26 @@ void *AsrService::asrProcess(void *p)
         pthread_mutex_unlock(&asrService->wakeupArrivalMutex);
 
         asrLauncher->process(asrService->wakeupEvent->getAsrFileName().c_str());
+        AudioPreprocessDispatcher::APDLEVEL = 2; //dothing
+
+        asrService->wakeupEvent->setAsrRes(asrLauncher->getFinalRes());
+        macroFuncVargs("asr res(%s)", asrService->wakeupEvent->getAsrRes().c_str());
+
+        list<WakeupListenner *>::iterator it = asrService->saListeners.begin();
+        for (; it != asrService->saListeners.end(); ++it)
+        {
+            (*it)->onWakeup(asrService->wakeupEvent);
+        }
     }
 
     return NULL;
+}
+
+void AsrService::addSaListeners(WakeupListenner *listenner)
+{
+    this->saListeners.push_back(listenner);
+}
+void AsrService::removeSaListeners(WakeupListenner *listenner)
+{
+    this->saListeners.remove(listenner);
 }

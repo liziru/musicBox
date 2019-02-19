@@ -3,6 +3,7 @@
 #include "WakeupEvent.h"
 #include "WakeupListenner.h"
 #include <pthread.h>
+#include <list>
 #include "AudioPreprocessAsrListenner.h"
 class AsrService : public AudioPreprocessAsrListenner
 {
@@ -14,11 +15,14 @@ public:
   void stop();
   // virtual void onWakeup(WakeupEvent *wakeupEvent);
   virtual void onDataArrival(WakeupEvent *wakeupEvent);
+  void addSaListeners(WakeupListenner *listenner);
+  void removeSaListeners(WakeupListenner *listenner);
 
 private:
   bool isRun;
   pthread_t th_asr;
   WakeupEvent *wakeupEvent;
+  list<WakeupListenner *> saListeners;
   pthread_cond_t wakeupArrivalCond;
   pthread_mutex_t wakeupArrivalMutex;
   static void *asrProcess(void *p);

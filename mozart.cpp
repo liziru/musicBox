@@ -27,6 +27,8 @@
 // #include "PlayBackAudio.h"
 #include "AsrService.h"
 #include "TtsService.h"
+#include "SemanticsAnalysis.h"
+#include "NeteaseMusicService.h"
 
 using namespace std;
 
@@ -45,6 +47,8 @@ int main(int argc, char *argv[])
 	IWakeupService *iWakeupService = new IWakeupService(1e-15, 1e-1, 300, 2000);
 	AudioPreprocessDispatcher *audioPreprocessDispatcher = new AudioPreprocessDispatcher(false, false, -15, 1, micDataSource);
 	LedService *ledService = new LedService(1, HIGH, 1500);
+	SemanticsAnalysis *sa = new SemanticsAnalysis();
+	NeteaseMusicService *neteaseService = new NeteaseMusicService();
 
 	// audioPreprocessDispatcher->setMicDataSource(micDataSource);
 	audioPreprocessDispatcher->addAudioPreprocessListenner((AudioPreprocessListenner *)iWakeupService);
@@ -54,7 +58,11 @@ int main(int argc, char *argv[])
 	iWakeupService->addWakeupListenner((WakeupListenner *)ledService);
 	// iWakeupService->addWakeupListenner((WakeupListenner *)playBackAudio);
 	iWakeupService->addWakeupListenner((WakeupListenner *)ttsService);
+	asrService->addSaListeners((WakeupListenner *)sa);
+	sa->addNeteaseListeners((WakeupListenner *)neteaseService);
 
+	neteaseService->run();
+	sa->run();
 	ttsService->run();
 	asrService->run();
 	iWakeupService->run();

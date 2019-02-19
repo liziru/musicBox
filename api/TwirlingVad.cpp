@@ -154,7 +154,7 @@ void TwirlingVad::process(const float *inbuf)
 
     amplitude /= FRAME_LEN;
 
-    m_amplitude_sm = m_amplitude_sm * factor + amplitude * (1 - factor);
+    m_amplitude_sm = m_amplitude_sm * factor + amplitude * (1 - factor);//smmoth
 
     m_amplitude_dB = 20 * logf((float)m_amplitude_sm);
     // if (m_amplitude_dB > -10)
