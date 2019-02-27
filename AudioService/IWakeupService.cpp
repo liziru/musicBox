@@ -286,7 +286,7 @@ void *IWakeupService::m_wakeupProcess(void *p)
         }
         else if (wakeupStatus == 1)
         {
-            AudioPreprocessDispatcher::APDLEVEL = 2;
+            AudioPreprocessDispatcher::APDLEVEL = 2;// do nothing
             macroFunc("\n=============Wakeup!   Change AudioPreprocessDispatcher::APDLEVEL status to 2 (waiting status.).\n");
 
             list<WakeupListenner *>::iterator it = wakeupService->wakeupListenners.begin();

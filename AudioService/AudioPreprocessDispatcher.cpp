@@ -124,15 +124,14 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
     void *m_vad_obj = NULL;
 
     //vad init
-    int currVadRs = 0;
-    int prevVadRs = 0;
+    int currVadRs = 1;
+    int prevVadRs = 1;
     // int beginCounter = 0;
     // int endCounter = 0;
     bool isStartSpeak = false;
     bool isInSpeak = false;
     bool isEndSpeak = false;
     bool resetFlag = false;
-    int emptyFifoFlag = 0;
     TwirlingVad *m_vad = new TwirlingVad(MicDataSource::FRAMELEN, dispatcher->micDataSource->getRate());
 
 #ifdef PRINT_TIME
@@ -157,7 +156,7 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
         if (!dispatcher->micDataSource->getDataPackage(inputMicData16s))
         {
             // macroFunc("wakeup: buf_read fail, buffer is empty.");
-            usleep(10);
+            usleep(100);
             continue;
         }
 
@@ -194,8 +193,12 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
             isEndSpeak = false;
             isStartSpeak = false;
             resetFlag = false;
-            // emptyFifoFlag = 0;
         }
+
+        //my vad
+        m_vad->process(outputData32f);
+        currVadRs = m_vad->getState();
+        // macroFuncVargs("dispatcherThread: vad getstatus, currVadRs=%d,prevVadRs=%d\n", currVadRs, prevVadRs);
 
         if (dispatcher->ansIsOn)
         {
@@ -222,31 +225,26 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
             memcpy(outputData32f, inputMicData32f, MicDataSource::FRAMELEN * sizeof(float));
         }
 
-        // if ((APDLEVEL != 1) && emptyFifoFlag)
-        // {
-        //     emptyFifoFlag = false;
-        // }
+        /** Convert input data from 32f to 16s. */
+        for (int i = 0; i < MicDataSource::FRAMELEN; i++)
+        {
+            int val = (int)(outputData32f[i] * (float)AudioPreprocessDispatcher::MAXABS16S);
+            if (val > (int)AudioPreprocessDispatcher::MAX16S)
+            {
+                outData16s[i] = AudioPreprocessDispatcher::MAX16S;
+            }
+            else if (val < (int)AudioPreprocessDispatcher::MIN16S)
+            {
+                outData16s[i] = AudioPreprocessDispatcher::MIN16S;
+            }
+            else
+            {
+                outData16s[i] = (short)val;
+            }
+        }
 
         if (APDLEVEL == 0) //awakeup process
         {
-            /** Convert input data from 32f to 16s. */
-            for (int i = 0; i < MicDataSource::FRAMELEN; i++)
-            {
-                int val = (int)(outputData32f[i] * (float)AudioPreprocessDispatcher::MAXABS16S);
-                if (val > (int)AudioPreprocessDispatcher::MAX16S)
-                {
-                    outData16s[i] = AudioPreprocessDispatcher::MAX16S;
-                }
-                else if (val < (int)AudioPreprocessDispatcher::MIN16S)
-                {
-                    outData16s[i] = AudioPreprocessDispatcher::MIN16S;
-                }
-                else
-                {
-                    outData16s[i] = (short)val;
-                }
-            }
-
             // dispatcher audio data
             list<AudioPreprocessListenner *>::iterator it = dispatcher->audioPreprocessListenners.begin();
             for (; it != dispatcher->audioPreprocessListenners.end(); ++it)
@@ -257,38 +255,6 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
         }
         else if (AudioPreprocessDispatcher::APDLEVEL == 1) //vad to save file to asr.
         {
-            // if (emptyFifoFlag < 10)
-            // {
-            //     // FIFO_DelAdd(dispatcher->micDataSource->pfifo, dispatcher->micDataSource->pfifo->Depth);
-            //     // int ret = dispatcher->micDataSource->emptyFifo();
-            //     emptyFifoFlag++;
-            //     // macroFuncVargs("delete all mic fifo. empty mic count(%d) ", ret);
-            //     continue;
-            // }
-
-            //my vad
-            m_vad->process(outputData32f);
-            currVadRs = m_vad->getState();
-            // macroFuncVargs("dispatcherThread vad getstatus: currVadRs=%d,prevVadRs=%d\n", currVadRs, prevVadRs);
-
-            /** Convert input data from 32f to 16s. */
-            for (int i = 0; i < MicDataSource::FRAMELEN; i++)
-            {
-                int val = (int)(outputData32f[i] * (float)AudioPreprocessDispatcher::MAXABS16S);
-                if (val > (int)AudioPreprocessDispatcher::MAX16S)
-                {
-                    outData16s[i] = AudioPreprocessDispatcher::MAX16S;
-                }
-                else if (val < (int)AudioPreprocessDispatcher::MIN16S)
-                {
-                    outData16s[i] = AudioPreprocessDispatcher::MIN16S;
-                }
-                else
-                {
-                    outData16s[i] = (short)val;
-                }
-            }
-
             //vad starts.
             if (currVadRs == 1 || currVadRs == 2)
             {
@@ -301,7 +267,7 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
 
             if (currVadRs == 0 && prevVadRs == 0)
             {
-                if (dispatcher->pfifo->Counter < 80)
+                if (dispatcher->pfifo->Counter < 15)
                 {
                     FIFO_AddOne(dispatcher->pfifo, outData16s);
                 }
@@ -341,6 +307,8 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
                 FIFO_AddOne(dispatcher->pfifo, outData16s);
             }
 
+            prevVadRs = currVadRs;
+
             if (isEndSpeak)
             {
                 resetFlag = true;
@@ -354,11 +322,9 @@ void *AudioPreprocessDispatcher::dispatcherThread(void *p)
                 {
                     (*it)->onDataArrival(wakeupEvent);
                 }
-                // macroFunc("AudioPreprocessDispatcher::dispatcherThread: display audio data to wakeup process.");
-                // delete wakeupEvent;
+                macroFunc("AudioPreprocessDispatcher::dispatcherThread: display audio data to asr_process.");
+                delete wakeupEvent;
             }
-
-            prevVadRs = currVadRs;
         }
 
 #ifdef DUMP_PROCESS_PCM_DATA

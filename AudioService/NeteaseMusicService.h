@@ -17,8 +17,12 @@ private:
   pthread_cond_t cond;
   WakeupEvent *wakeupEvent;
   bool isRun;
-
+  const static string URL;
   list<WakeupListenner *> downloadListeners;
+  int startNeteaseClient();
+  int requestProcess(string request, string *srResult);
+  int login(string *srResult);
+  int showLoginStatus();
 
 public:
   NeteaseMusicService();

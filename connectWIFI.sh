@@ -6,11 +6,12 @@
 
 if [ $# -lt 3 ];then
     echo "argument is short."
+    exit 1
 fi
 
 ssid=`$1`
 pwd=`$2`
-echo -e "$ssid $pwd"
+echo -e "ssid:$ssid  pwd:$pwd"
 
 echo -e "查看网络设备列表"
 nmcli dev

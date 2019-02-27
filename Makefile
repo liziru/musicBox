@@ -7,7 +7,7 @@ LD_FLAG = -L./out/lib
 LIBS = -lasound -lpthread -lTwirlingCapture -lTwirlingWakeupNN -lwiringPi -lcurl -lsqlite3 -llog4cpp #-lnlsCommonSdk -ljsoncpp -lssl -lcrypto -lcurl -luuid
 OBJS = mozart.o ./logApi/log.o MicDataSource/MicDataSource.o  \
 	AudioService/AudioPreprocessDispatcher.o  AudioService/IWakeupService.o \
-	AudioService/WakeupEvent.o AudioService/LedService.o   ./AudioService/TtsService.o ./AudioService/AsrService.o ./AudioService/SemanticsAnalysis.o  ./AudioService/NeteaseMusicService.o \
+	AudioService/WakeupEvent.o AudioService/LedService.o ./AudioService/TtsService.o ./AudioService/AsrService.o ./AudioService/SemanticsAnalysis.o  ./AudioService/NeteaseMusicService.o \
 	api/BaiduVoice.o api/TokenHolder.o api/TtsResult.o api/TwirlingVad.o api/Ali_RestfulASR.o   \
 	utils/util.o utils/fifo.o utils/serialControl.o AudioService/DeviceInfo.o 
 DEP_DIR = ./MicDataSource ./AudioService ./api ./utils ./logApi
