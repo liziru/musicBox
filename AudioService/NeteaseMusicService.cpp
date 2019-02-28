@@ -14,6 +14,7 @@ NeteaseMusicService::~NeteaseMusicService()
     wakeupEvent = NULL;
     pthread_cond_destroy(&cond);
     pthread_mutex_destroy(&mutex);
+    //start netease
     isRun = false;
 }
 
@@ -30,7 +31,6 @@ void *NeteaseMusicService::neteaseProcess(void *p)
         pthread_mutex_unlock(&neteaseService->mutex);
         macroFuncVargs("NeteaseMusicService: asr res(%s)", neteaseService->wakeupEvent->getAsrRes().c_str());
         //process
-        // exit(0);
         list<WakeupListenner *>::iterator it = neteaseService->downloadListeners.begin();
         for (; it != neteaseService->downloadListeners.end(); ++it)
         {
