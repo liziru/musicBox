@@ -25,6 +25,6 @@ private:
   list<WakeupListenner *> saListeners;
   pthread_cond_t wakeupArrivalCond;
   pthread_mutex_t wakeupArrivalMutex;
-  static void *asrParocess(void *p);
+  static void *asrProcess(void *p);
 };
 #endif //__ASR_SERVICE_H__
