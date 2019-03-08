@@ -34,6 +34,7 @@ void NeteaseMusicLanucher::onWakeup(int type, string msg)
     // wakeupEvent->setAsrRes(wuEvent->getAsrRes());
     // string jsonMsg = msg;
     workType = type;
+
     if (parseJson(msg) && !playbackList.empty())
     {
         pthread_cond_signal(&cond);
@@ -42,6 +43,8 @@ void NeteaseMusicLanucher::onWakeup(int type, string msg)
 
 void NeteaseMusicLanucher::onWakeup(WakeupEvent *wakeupEvent)
 {
+    printf("\n\n\n\nJson to parse:%s\n\n", wakeupEvent->getlanJsonTask().c_str());
+
     pthread_cond_signal(&cond);
 }
 
