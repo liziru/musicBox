@@ -279,3 +279,25 @@ string readFileToText(string fileName)
     inf.close();
     return rs;
 }
+vector<int> getProcessPid(string processName)
+{
+    char buff[80];
+    int i = 0;
+    char *ret;
+    vector<int> rs;
+
+    sprintf(buff, "pidof %s", processName.c_str());
+    FILE *pidreader = popen(buff, "r");
+    memset(buff, 0, 80);
+
+    ret = fgets(buff, 79, pidreader);
+    pclose(pidreader);
+
+    ret = strtok(buff, " ");
+    while (ret != NULL)
+    {
+        rs.push_back(atoi(ret));
+        ret = strtok(NULL, " ");
+    }
+    return rs;
+}

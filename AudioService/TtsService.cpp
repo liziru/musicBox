@@ -5,11 +5,10 @@
 #include "gpio.h"
 #include "AudioPreprocessDispatcher.h"
 
-TtsService::TtsService()
+TtsService::TtsService(PlayBackAudio *playBack) : playBack(playBack)
 {
     this->wakeupEvent = new WakeupEvent();
     this->wakeupEvent->setAngle(0);
-
     pthread_mutex_init(&mutex, NULL);
     pthread_cond_init(&cond, NULL);
 }
@@ -17,8 +16,11 @@ TtsService::~TtsService()
 {
     pthread_cond_destroy(&cond);
     pthread_mutex_destroy(&mutex);
-    delete wakeupEvent;
-    wakeupEvent = NULL;
+    if (wakeupEvent)
+    {
+        delete wakeupEvent;
+        wakeupEvent = NULL;
+    }
 }
 void TtsService::run()
 {
@@ -27,7 +29,8 @@ void TtsService::run()
 void *TtsService::launchProcess(void *p)
 {
     pthread_detach(pthread_self());
-    digitalWrite(SPEAK_LED, HIGH);
+    // digitalWrite(SPEAK_LED, HIGH);
+
     TtsService *ttsLauncher = (TtsService *)p;
     int tmpAngle = 0;
     (int)ttsLauncher->wakeupEvent->getAngle();
@@ -61,18 +64,25 @@ void *TtsService::launchProcess(void *p)
         else
         {
             // macroFuncVargs("TtsService::laun chProcess: mpg123 filename(%s)", ttsResult->getTtsVoiceFilename().c_str());
-            string cmd = string("mpg123 " + ttsResult->getTtsVoiceFilename());
-            system(cmd.c_str());
+            // string cmd = string("mpg123 " + ttsResult->getTtsVoiceFilename());
+            // system(cmd.c_str());
             // sleep(1);
-            AudioPreprocessDispatcher::APDLEVEL = 1; //record
-            macroFunc(" ## Start to record.");
+            // macroFuncVargs("ATTENTION: tts is finished,file name:%s", ttsLauncher->wakeupEvent->getPbFile().c_str());
+
+            ttsLauncher->playBack->start();
+            ttsLauncher->wakeupEvent->setPbFile(ttsResult->getTtsVoiceFilename());
+            macroFuncVargs("ATTENTION: tts is finished,file name:%s", ttsLauncher->wakeupEvent->getPbFile().c_str());
+
+            ttsLauncher->playBack->onWakeup(ttsLauncher->wakeupEvent);
+
+            // macroFunc(" ## Start to record.");
         }
     }
 
     //start to record voice and asr-ali
-    AudioPreprocessDispatcher::APDLEVEL = 1; //asr
+    // AudioPreprocessDispatcher::APDLEVEL = 1; //asr
 
-    digitalWrite(SPEAK_LED, LOW);
+    // digitalWrite(SPEAK_LED, LOW);
     delete ttsResult;
     delete bdVoice;
     return NULL;

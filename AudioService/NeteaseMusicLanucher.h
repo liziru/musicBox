@@ -1,12 +1,16 @@
 #if !defined(__NETEASEMUSIC_LANUCHER_)
 #define __NETEASEMUSIC_LANUCHER_
 
-#include "WakeupEvent.h"
-#include "WakeupListenner.h"
 #include <string>
 #include <pthread.h>
-#include "log.h"
 #include <list>
+
+#include "PlayBackAudio.h"
+#include "log.h"
+#include "WakeupEvent.h"
+#include "WakeupListenner.h"
+#include "DownloadService.h"
+
 using namespace std;
 
 class NeteaseMusicLanucher : public WakeupListenner
@@ -18,62 +22,20 @@ class NeteaseMusicLanucher : public WakeupListenner
     pthread_mutex_t mutex;
     pthread_cond_t cond;
     bool isRun;
+    PlayBackAudio *playbackAudio;
+    DownloadService *downloadService;
+    int workType; //0:do nothing; 1:playback what I like.
+    pthread_t th_netease;
     //ways
     static void *neteaseLanucherProcess(void *p);
+    bool parseJson(string msg);
 
   public:
-    NeteaseMusicLanucher(/* args */);
+    NeteaseMusicLanucher(PlayBackAudio *pb, DownloadService *download);
     ~NeteaseMusicLanucher();
+    void onWakeup(int type, string msg);
     void onWakeup(WakeupEvent *wakeupEvent);
     void run();
 };
-
-NeteaseMusicLanucher::NeteaseMusicLanucher()
-{
-    wakeupEvent = new WakeupEvent();
-    pthread_mutex_init(&mutex, NULL);
-    pthread_cond_init(&cond, NULL);
-    isRun = false;
-}
-
-NeteaseMusicLanucher::~NeteaseMusicLanucher()
-{
-    if (wakeupEvent)
-    {
-        delete wakeupEvent;
-        wakeupEvent = NULL;
-    }
-    pthread_cond_destroy(&cond);
-    pthread_mutex_destroy(&mutex);
-}
-void NeteaseMusicLanucher::onWakeup(WakeupEvent *wakeupEvent)
-{
-    // wakeupEvent
-}
-
-static void *NeteaseMusicLanucher::neteaseLanucherProcess(void *p)
-{
-    NeteaseMusicLanucher *lancher = (NeteaseMusicLanucher *)p;
-    lancher->isRun = true;
-
-    while (lancher->isRun)
-    {
-        pthread_mutex_lock(&neteaseService->mutex);
-        pthread_cond_wait(&neteaseService->cond, &neteaseService->mutex);
-        pthread_mutex_unlock(&neteaseService->mutex);
-        while(1){
-            
-        }
-        
-    }
-}
-
-void NeteaseMusicLanucher::run()
-{
-    if (!this->isRun)
-    {
-        pthread_create(&th_netease, NULL, neteaseLanucherProcess, (void *)this);
-    }
-}
 
 #endif // __NETEASEMUSIC_LANUCHER_

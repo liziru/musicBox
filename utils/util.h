@@ -1,4 +1,4 @@
-#ifndef __UTIL_H_  
+#ifndef __UTIL_H_
 #define __UTIL_H_
 #include <string.h>
 #include <string>
@@ -20,6 +20,8 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
+#include <vector>
+
 #define REMOTE_SERVER_PORT 1500
 
 using namespace std;
@@ -59,5 +61,7 @@ string getMacAddressToString();
 bool saveTextToFile(string fileName, string text);
 
 string readFileToText(string fileName);
-#endif
 
+vector<int> getProcessPid(string processName);
+
+#endif

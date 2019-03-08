@@ -51,8 +51,8 @@ size_t Ali_RestfulASR::responseCallback(void *ptr, size_t size, size_t nmemb, vo
 #endif
 
     *srResult += response;
-    cout << "current result: " << response << endl;
-    cout << "total result: " << *srResult << endl;
+    // cout << "current result: " << response << endl;
+    // cout << "total result: " << *srResult << endl;
 
     return len;
 }

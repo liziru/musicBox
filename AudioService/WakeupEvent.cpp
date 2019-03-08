@@ -39,3 +39,31 @@ void WakeupEvent::setAsrRes(string res)
 {
     this->asrRes = res;
 }
+
+string WakeupEvent::getPbFile()
+{
+    return this->pbFileName;
+}
+
+void WakeupEvent::setPbFile(string pbFileName)
+{
+    this->pbFileName = pbFileName;
+}
+
+void WakeupEvent::setLanType(int type)
+{
+    lanType = type;
+}
+int WakeupEvent::getLanType()
+{
+    return lanType;
+}
+
+void WakeupEvent::setLanJsonTask(string json)
+{
+    lanJsonTask = json;
+}
+string WakeupEvent::getlanJsonTask()
+{
+    return lanJsonTask;
+}

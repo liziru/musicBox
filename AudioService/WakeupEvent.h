@@ -16,10 +16,23 @@ public:
   string getAsrRes();
   void setAsrRes(string res);
 
+  string getPbFile();
+  void setPbFile(string pbFileName);
+
+  void setLanType(int type);
+  int getLanType();
+
+  void setLanJsonTask(string json);
+  string getlanJsonTask();
+
 private:
   float angle;
   string word;
   string asrFileName;
   string asrRes;
+  string pbFileName; //playback-file-name
+  //netease lanucher
+  int lanType;
+  string lanJsonTask;
 };
 #endif //__WAKEUP_EVENT_H__

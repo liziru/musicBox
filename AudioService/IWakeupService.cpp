@@ -94,7 +94,7 @@ DeviceInfo selectDeviceInfo()
 
 const int IWakeupService::ANGLES_MIX_SIZE = 20;
 
-IWakeupService::IWakeupService(float wakeupThreshold, float wakeupPlp, float wakeupDmin, float wakeupDmax)
+IWakeupService::IWakeupService(float wakeupThreshold, float wakeupPlp, float wakeupDmin, float wakeupDmax, DISPATCHER *dp, TtsService *ttsService)
     : wakeupThreshold(wakeupThreshold), wakeupPlp(wakeupPlp), wakeupDmin(wakeupDmin), wakeupDmax(wakeupDmax),
       th_wakeup(0), isRun(false), audioData(NULL), m_wakeup_obj(NULL)
 {
@@ -107,16 +107,9 @@ IWakeupService::IWakeupService(float wakeupThreshold, float wakeupPlp, float wak
     int sRate = 16000;
     float detect_th = 0.7;
 
-    // DeviceInfo deviceInfo = selectDeviceInfo();
-    // int keyValue = atoi((char *)deviceInfo.getDeviceDesc().c_str());
-    // if (deviceInfo.getDeviceDesc().empty() ||keyValue <= 0 || keyValue > 90)
-    // {
-    //     keyValue = 80;
-    // }
-    // int keyValue = 40;
-    // printf("Device info: %s; target value :%d \n", deviceInfo.toString().c_str(), keyValue);
+    this->ttsService = ttsService;
+    g_dispatcher = dp;
 
-    // void* wakeupInit(int stride_len, int chs, int sRate, char *graph, char *labels, char *keyword, int smooth_N, float detect_T, int clip_len, bool printFlag);
     m_wakeup_obj = wakeupInit(stride_len, chs, sRate, NULL, "", NULL, 2, detect_th, 1500, false);
     if (m_wakeup_obj != NULL)
     {
@@ -286,16 +279,14 @@ void *IWakeupService::m_wakeupProcess(void *p)
         }
         else if (wakeupStatus == 1)
         {
-            AudioPreprocessDispatcher::APDLEVEL = 2;// do nothing
-            macroFunc("\n=============Wakeup!   Change AudioPreprocessDispatcher::APDLEVEL status to 2 (waiting status.).\n");
+            macroFunc("\n=============Wakeup!   Change AudioPreprocessDispatcher::status to 2 (waiting status.).\n");
 
-            list<WakeupListenner *>::iterator it = wakeupService->wakeupListenners.begin();
-            for (; it != wakeupService->wakeupListenners.end(); ++it)
-            {
-                wakeupEvent->setAngle(wakeupService->calcWakeupAngle());
-                wakeupEvent->setWord("");
-                (*it)->onWakeup(wakeupEvent); //LedService::onWakeup(WakeupEvent *wakeupEvent){
-            }
+            wakeupService->g_dispatcher->status = -1; //do nothing
+            wakeupEvent->setAngle(wakeupService->calcWakeupAngle());
+            wakeupEvent->setWord("");
+            wakeupService->ttsService->onWakeup(wakeupEvent);
+            sleep(2);
+            wakeupService->g_dispatcher->status = 1; //to asr
         }
     }
 

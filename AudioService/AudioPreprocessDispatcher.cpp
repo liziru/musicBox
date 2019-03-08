@@ -8,6 +8,7 @@
 #include "log.h"
 #include "TwirlingVad.h"
 
+
 const float AudioPreprocessDispatcher::SCALE = 1.f / (float)(MAXABS16S);
 string AudioPreprocessDispatcher::asrFileName = "";
 int AudioPreprocessDispatcher::APDLEVEL = 0;

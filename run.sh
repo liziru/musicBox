@@ -19,7 +19,7 @@ then
 	amixer cset numid=17 off
 	amixer cset numid=12 off
 	amixer cset numid=4 7
-	amixer cset numid=3 on
+	amixer cset numid=3 31
 	amixer cset numid=2 31
 	amixer cset numid=20 1
 	amixer cset numid=7 7

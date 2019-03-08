@@ -38,9 +38,9 @@ void *SemanticsAnalysis::semanticsAnalysis_process(void *p)
     }
 }
 
-void SemanticsAnalysis::onWakeup(WakeupEvent *wakeupEvent)
+void SemanticsAnalysis::onWakeup(WakeupEvent *wuEvent)
 {
-    wakeupEvent->setAsrRes(wakeupEvent->getAsrRes());
+    wakeupEvent->setAsrRes(wuEvent->getAsrRes());
     pthread_cond_signal(&cond);
 }
 void SemanticsAnalysis::run()

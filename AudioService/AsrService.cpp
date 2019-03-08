@@ -42,7 +42,7 @@ void *AsrService::asrProcess(void *p)
     pthread_detach(pthread_self());
     AsrService *asrService = (AsrService *)p;
     asrService->isRun = true;
-    Ali_RestfulASR *asrLauncher = new Ali_RestfulASR("74e6605ac2c942a9abaaae3f33419261"); //tokenkey
+    Ali_RestfulASR *asrLauncher = new Ali_RestfulASR("ce23f71a375a47cab0654c2feedef042"); //tokenkey
 
     while (asrService->isRun)
     {

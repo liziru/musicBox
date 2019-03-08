@@ -11,28 +11,38 @@ using namespace std;
 class NeteaseMusicService : public WakeupListenner
 {
 private:
+  const static string URL;
+  const static string COOKIE_FILE;
   pthread_t th_netease;
-  static void *neteaseProcess(void *p);
   pthread_mutex_t mutex;
   pthread_cond_t cond;
   WakeupEvent *wakeupEvent;
   bool isRun;
-  const static string URL;
-  list<WakeupListenner *> downloadListeners;
-  int startNeteaseClient();
-  // int requestProcess(string request, string *srResult);
+  list<WakeupListenner *> neteaseLanucherListeners;
+  string loginRes;
+  FILE *fpr;
+  unsigned long uid;
 
-  int login(string *srResult);
-  int showLoginStatus();
-  int requestProcess(string request, string *srResult);
+  //way
+  bool startNeteaseClient();
+  // int requestProcess(string request, string *srResult);
+  bool login();
+  string showLoginStatus();
+  static bool requestProcess(string request, string *srResult);
+  static bool requestProcessWithCookie(string request, string *srResult);
+  static bool loginRequestProcess(string request, string *srResult);
+
+  string getNeteaseRecommandList();
+  string getMusicUrlById(long id);
+  static void *neteaseProcess_thread(void *p);
 
 public:
   NeteaseMusicService();
   ~NeteaseMusicService();
-  void onWakeup(WakeupEvent *wakeupEvent);
+  void onWakeup(WakeupEvent *wuEvent);
   void run();
 
-  void addDownloadListeners(WakeupListenner *listenner);
-  void removeDownloadListeners(WakeupListenner *listenner);
+  void addNeteaseLanucherListeners(WakeupListenner *listenner);
+  void removeNeteaseLanucherListeners(WakeupListenner *listenner);
 };
 #endif // __NeteaseMusicProcess__H

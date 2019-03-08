@@ -5,11 +5,12 @@
  * @Author: Lipingping
  * @Date: 2019-01-30 18:43:04
  * @LastEditors: Lipingping
- * @LastEditTime: 2019-01-31 10:28:08
+ * @LastEditTime: 2019-03-08 12:23:54
  */
 
 #include "PlayBackAudio.h"
 #include "log.h"
+#include "util.h"
 
 // #define DUMP_PCM_DATA
 using namespace std;
@@ -25,14 +26,26 @@ PlayBackAudio::PlayBackAudio(string deviceName, int rate,
 	// FIFO_Init(this->pfifo, sArray, sizeof(short) * FRAMELEN * this->channel, FIFO_BUFF_COUNT);
 	pthread_mutex_init(&this->m_Mutex, NULL);
 	pthread_cond_init(&this->m_Cond, NULL);
+	wakeupEvent = new WakeupEvent();
 	this->prepare();
+	this->isRun = false;
 }
+
 PlayBackAudio::~PlayBackAudio()
 {
 	this->isRun = false;
 	pthread_mutex_destroy(&this->m_Mutex);
 	pthread_cond_destroy(&this->m_Cond);
-	delete instance;
+	if (instance)
+	{
+		delete instance;
+		instance = NULL;
+	}
+	if (wakeupEvent)
+	{
+		delete wakeupEvent;
+		wakeupEvent = NULL;
+	}
 }
 
 PlayBackAudio::PlayBackAudio(const PlayBackAudio &)
@@ -260,13 +273,21 @@ void PlayBackAudio::stop()
 {
 	this->isRun = false;
 }
+
+void PlayBackAudio::start()
+{
+	this->isRun = true;
+}
 /**
  * @description: signal the playback_thread to read audio file and playback.
  * @param {type} 
  * @return: 
  */
-void PlayBackAudio::onWakeup(WakeupEvent *wakeupEvent)
+void PlayBackAudio::onWakeup(WakeupEvent *wuEvent)
 {
+	wakeupEvent->setPbFile(wuEvent->getPbFile());
+	macroFuncVargs("ATTENTION: file name:%s", wakeupEvent->getPbFile().c_str());
+
 	pthread_cond_signal(&this->m_Cond);
 }
 
@@ -274,11 +295,12 @@ void *PlayBackAudio::playback_process(void *p)
 {
 	// pthread_detach(pthread_self());
 	PlayBackAudio *pb = (PlayBackAudio *)p;
-	pb->isRun = true;
+	// pb->isRun = true;
 	int err = 0, buffer_frames = FRAMELEN, ret = 0;
 	int time_delay = 12000, err_count = 0;
 	short *inputMicData16s = (short *)malloc(sizeof(short) * FRAMELEN * pb->channel);
-
+	string pcmFile;
+	FILE *fpr = NULL;
 #ifdef DUMP_PCM_DATA
 	FILE *dumpReadOutput = NULL;
 	if ((dumpReadOutput = fopen("./dump_raw.pcm", "wb")) == NULL)
@@ -291,23 +313,49 @@ void *PlayBackAudio::playback_process(void *p)
 
 	while (1)
 	{
-		// pthread_mutex_lock(&pb->m_Mutex);
-		// pthread_cond_wait(&pb->m_Cond, &pb->m_Mutex);
-		// pthread_mutex_unlock(&pb->m_Mutex);
-		// FILE *fpr;
-		// fpr = fopen ("filename.txt","rb");
-		// if (fpr!=NULL)
-		// {
-		// 	fscanf(fpr,"Some String\n", Some String\n);
-		// 	fclose (fpr);
-		// }
+		pthread_mutex_lock(&pb->m_Mutex);
+		pthread_cond_wait(&pb->m_Cond, &pb->m_Mutex);
+		pthread_mutex_unlock(&pb->m_Mutex);
+
+		string playBackFile = pb->wakeupEvent->getPbFile();
+		if (!playBackFile.empty())
+		{
+			if (playBackFile.rfind(".mp3") != std::string::npos)
+			{
+				// string cmd = ("mpg123  " + playBackFile);
+				pcmFile = "/home/pi/test.pcm";
+				string cmd = "sudo ffmpeg  -i " + playBackFile + " -acodec pcm_s16le -f s16le -ac 1 -ar 16000  " + pcmFile + "  >/dev/null"; // ffmpeg -i ttsVoiceFile.mp3  -f s16be -ar 16000 -ac 1 -acodec pcm_s16le pcm16k.pcm
+				macroFuncVargs("ATTENTION: cmd:%s", cmd.c_str());
+				system(cmd.c_str());
+			}
+		}
+		else
+		{
+			continue;
+		}
+
+		if (!fileIsExist(pcmFile))
+		{
+			macroFuncVargs("ERROR: file does not exist.");
+			continue;
+		}
+
+		fpr = fopen(pcmFile.c_str(), "rb");
+		if (fpr == NULL)
+		{
+			printf("ERROR: failed to fopen:%s", pcmFile.c_str());
+			fpr = NULL;
+			exit(1);
+		}
 
 		while (pb->isRun)
 		{
-			// ret = fread(inputMicData16s, 2, buffer_frames, fpr);
-			//if(ret<=0){
-			// 	break;
-			// }
+			if (fread(inputMicData16s, sizeof(short), buffer_frames, fpr) <= 0)
+			{
+				macroFuncVargs("WARNING: fread is finished,reason:%s", strerror(errno));
+				break;
+			}
+
 			err = snd_pcm_writei(pb->playback_handle, inputMicData16s, buffer_frames);
 			if (err != buffer_frames)
 			{
@@ -393,8 +441,14 @@ void *PlayBackAudio::playback_process(void *p)
 			fflush(dumpReadOutput);
 #endif
 		}
-	}
 
+		if (fpr)
+		{
+			free(fpr);
+			fpr = NULL;
+		}
+		deleteFile(pcmFile);
+	}
 	if (NULL != inputMicData16s)
 	{
 		free(inputMicData16s);
