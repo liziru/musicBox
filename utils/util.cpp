@@ -4,7 +4,7 @@ long str2time(string datetime)
 {
     struct tm tm_time;
     long unixtime;
-	strptime(datetime.c_str(), "%Y-%m-%d %H:%M:%S", &tm_time);
+    strptime(datetime.c_str(), "%Y-%m-%d %H:%M:%S", &tm_time);
 
     unixtime = mktime(&tm_time);
     return unixtime;
@@ -17,63 +17,72 @@ long getCurrUnixtime(void)
     return unixtime;
 }
 
-string getTimeStr(){
+string getTimeStr()
+{
     struct tm *t;
     time_t tt;
     time(&tt);
     t = localtime(&tt);
-	char tmp[50] = {0};
-	sprintf(tmp, "%4d_%02d_%02d-%02d_%02d_%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
-	return string(tmp);
+    char tmp[50] = {0};
+    sprintf(tmp, "%4d_%02d_%02d-%02d_%02d_%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+    return string(tmp);
 }
 
-string getDateTimeSqlStr(){
+string getDateTimeSqlStr()
+{
     struct tm *t;
     time_t tt;
     time(&tt);
     t = localtime(&tt);
-	char tmp[50] = {0};
-	sprintf(tmp, "%4d-%02d-%02d %02d:%02d:%02d.000", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
-	return string(tmp);
+    char tmp[50] = {0};
+    sprintf(tmp, "%4d-%02d-%02d %02d:%02d:%02d.000", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
+    return string(tmp);
 }
-bool fileIsExist(string fileName){
-	if(access(fileName.c_str(), R_OK | W_OK) < 0){
-		return false;
-	}
-	return true;
+bool fileIsExist(string fileName)
+{
+    if (access(fileName.c_str(), R_OK | W_OK) < 0)
+    {
+        return false;
+    }
+    return true;
 }
 
-bool deleteFile(string fileName){
-	if(fileIsExist(fileName)){
-		if(0 != remove(fileName.c_str())){
-			return false;
-		}else{
-			return true;
-		}
-	}
-	return true;
+bool deleteFile(string fileName)
+{
+    if (fileIsExist(fileName))
+    {
+        if (0 != remove(fileName.c_str()))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    return true;
 }
 
 //C++方法：将 string 转换为数值
 double convertFromString(const string &s)
 {
-	istringstream i(s);
-	double x;
-	if (i >> x)
-		return x;
-	return 0.0;//if error
+    istringstream i(s);
+    double x;
+    if (i >> x)
+        return x;
+    return 0.0; //if error
 }
 
 int randomNumber(int start, int end)
 {
-	srand((unsigned)time(NULL));
-	int dis = end - start;
-	return rand() % dis + start;
+    srand((unsigned)time(NULL));
+    int dis = end - start;
+    return rand() % dis + start;
 }
 
 string getContentFilePath()
 {
-	return "/home/pi/workspace/alize/";
+    return "/home/pi/workspace/alize/";
 }
 
 string getGmmFilePath()
@@ -105,9 +114,9 @@ string getGmmUniqueFileName(string userName)
 
 long getCurrentTime()
 {
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
 int broadcastData(string ipStr, string dataStr)
 {
@@ -188,92 +197,92 @@ int broadcastData(string ipStr, string dataStr)
 
 uint32_t getIpAddress()
 {
-	struct ifaddrs *ifaddr, *ifa;
-	int family, s, n;
-	uint32_t result;
+    struct ifaddrs *ifaddr, *ifa;
+    int family, s, n;
+    uint32_t result;
 
-	if (getifaddrs(&ifaddr) == -1)
-	{
-		return 0;
-	}
+    if (getifaddrs(&ifaddr) == -1)
+    {
+        return 0;
+    }
 
-	for (ifa = ifaddr, n = 0; ifa != NULL; ifa = ifa->ifa_next, n++)
-	{
-		if (ifa->ifa_addr == NULL)
-			continue;
+    for (ifa = ifaddr, n = 0; ifa != NULL; ifa = ifa->ifa_next, n++)
+    {
+        if (ifa->ifa_addr == NULL)
+            continue;
 
-		if (ifa->ifa_addr->sa_family != AF_INET)
-			continue;
+        if (ifa->ifa_addr->sa_family != AF_INET)
+            continue;
 
-		if (strcmp(ifa->ifa_name, "lo") == 0)
-			continue;
+        if (strcmp(ifa->ifa_name, "lo") == 0)
+            continue;
 
-		/* AF_INET */
-		result = ((struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
-		freeifaddrs(ifaddr);
-		return result;
-	}
+        /* AF_INET */
+        result = ((struct sockaddr_in *)ifa->ifa_addr)->sin_addr.s_addr;
+        freeifaddrs(ifaddr);
+        return result;
+    }
 
-	freeifaddrs(ifaddr);
-	return 0;
+    freeifaddrs(ifaddr);
+    return 0;
 }
 
 string ipAddressToString(uint32_t ip)
 {
-	char result[INET_ADDRSTRLEN];
+    char result[INET_ADDRSTRLEN];
 
-	inet_ntop(AF_INET, (void *)&ip, result, sizeof(result));
+    inet_ntop(AF_INET, (void *)&ip, result, sizeof(result));
 
-	return string(result);
+    return string(result);
 }
 
-//返回MAC地址字符串  
-string getMacAddressToString()  
-{  
-    struct ifreq tmp;  
-    int sock_mac;  
-    char mac_addr[30];  
-    sock_mac = socket(AF_INET, SOCK_STREAM, 0);  
-    if( sock_mac == -1)  
-    {  
-        // perror("create socket fail\n");  
-        return "";  
-    }  
-    memset(&tmp,0,sizeof(tmp));  
-    strncpy(tmp.ifr_name,"eth0",sizeof(tmp.ifr_name)-1 );  
-    if( (ioctl( sock_mac, SIOCGIFHWADDR, &tmp)) < 0 )  
-    {  
-        // printf("mac ioctl error\n");  
-        return "";  
-    }  
-    sprintf(mac_addr, "%02x%02x%02x%02x%02x%02x",  
-        (unsigned char)tmp.ifr_hwaddr.sa_data[0],  
-        (unsigned char)tmp.ifr_hwaddr.sa_data[1],  
-        (unsigned char)tmp.ifr_hwaddr.sa_data[2],  
-        (unsigned char)tmp.ifr_hwaddr.sa_data[3],  
-        (unsigned char)tmp.ifr_hwaddr.sa_data[4],  
-        (unsigned char)tmp.ifr_hwaddr.sa_data[5]  
-    );  
-    close(sock_mac);  
+//返回MAC地址字符串
+string getMacAddressToString()
+{
+    struct ifreq tmp;
+    int sock_mac;
+    char mac_addr[30];
+    sock_mac = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock_mac == -1)
+    {
+        // perror("create socket fail\n");
+        return "";
+    }
+    memset(&tmp, 0, sizeof(tmp));
+    strncpy(tmp.ifr_name, "eth0", sizeof(tmp.ifr_name) - 1);
+    if ((ioctl(sock_mac, SIOCGIFHWADDR, &tmp)) < 0)
+    {
+        // printf("mac ioctl error\n");
+        return "";
+    }
+    sprintf(mac_addr, "%02x%02x%02x%02x%02x%02x",
+            (unsigned char)tmp.ifr_hwaddr.sa_data[0],
+            (unsigned char)tmp.ifr_hwaddr.sa_data[1],
+            (unsigned char)tmp.ifr_hwaddr.sa_data[2],
+            (unsigned char)tmp.ifr_hwaddr.sa_data[3],
+            (unsigned char)tmp.ifr_hwaddr.sa_data[4],
+            (unsigned char)tmp.ifr_hwaddr.sa_data[5]);
+    close(sock_mac);
     return string(mac_addr);
 }
 
 bool saveTextToFile(string fileName, string text)
 {
-    ofstream outf; 
+    ofstream outf;
     outf.open(fileName);
-    outf<<text<<endl;
+    outf << text << endl;
     outf.close();
     return fileIsExist(fileName);
 }
 
 string readFileToText(string fileName)
 {
-    ifstream inf; 
+    ifstream inf;
     inf.open(fileName);
     string rs;
     string tmp;
-    while(getline(inf, tmp)){
+    while (getline(inf, tmp))
+    {
         rs += tmp;
     }
     inf.close();
@@ -300,4 +309,14 @@ vector<int> getProcessPid(string processName)
         ret = strtok(NULL, " ");
     }
     return rs;
+}
+
+bool renameFile(string oldf, string newf)
+{
+
+    if (rename(oldf.c_str(), newf.c_str()) < 0)
+    {
+        return false;
+    }
+    return true;
 }

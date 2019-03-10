@@ -262,7 +262,7 @@ void *NeteaseMusicService::neteaseProcess_thread(void *p)
             macroFuncVargs("ERROR: failed to getNeteaseRecommandList(%s)", recommandRes.c_str());
             exit(1);
         }
-        printf("recommandRes is returned ,con:%s\n\n", recommandRes.c_str());
+        // printf("recommandRes is returned ,con:%s\n\n", recommandRes.c_str());
 
         // string loginStatus = neteaseService->showLoginStatus();
         // macroFuncVargs("showLoginStatus:%s", loginStatus.c_str());

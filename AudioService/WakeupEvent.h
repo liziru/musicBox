@@ -25,6 +25,18 @@ public:
   void setLanJsonTask(string json);
   string getlanJsonTask();
 
+  string getDlUrl();
+  void setDlUrl(string url);
+
+  string getDlMusicFile();
+  void setDlMusicFile(string musicFile);
+  // class
+  // {
+  // public:
+  //   string url;
+  //   string musicFile;
+  // } download;
+
 private:
   float angle;
   string word;
@@ -34,5 +46,8 @@ private:
   //netease lanucher
   int lanType;
   string lanJsonTask;
+  //download service
+  string dlUrl;
+  string dlMusicFile;
 };
 #endif //__WAKEUP_EVENT_H__

@@ -64,4 +64,5 @@ string readFileToText(string fileName);
 
 vector<int> getProcessPid(string processName);
 
+bool renameFile(string oldf,string newf);
 #endif

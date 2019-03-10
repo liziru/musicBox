@@ -23,17 +23,23 @@ class DownloadService : public WakeupListenner
 {
   private:
     pthread_t th_download;
-    static void *downloadProcess(void *p);
+    static void *downloadProcess_thread(void *p);
     pthread_mutex_t mutex;
     pthread_cond_t cond;
     WakeupEvent *wakeupEvent;
     bool isRun;
     list<WakeupListenner *> playbackListeners;
-
+    string downloadUrl;
+    string destFileName;
+    
+    const static int BUFFER_SIZE;
+    static bool isValidUrl(string url);
+    static bool downloadMusicByUrl(string url,string musicFile);
+    static string getFileFromUrl(string url);
   public:
     DownloadService();
     ~DownloadService();
-    void onWakeup(WakeupEvent *wakeupEvent);
+    void onWakeup(WakeupEvent *wuEvent);
     void run();
 
     void addPlaybackListeners(WakeupListenner *listenner);

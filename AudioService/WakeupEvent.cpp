@@ -67,3 +67,21 @@ string WakeupEvent::getlanJsonTask()
 {
     return lanJsonTask;
 }
+
+string WakeupEvent::getDlUrl()
+{
+    return this->dlUrl;
+}
+void WakeupEvent::setDlUrl(string url)
+{
+    this->dlUrl = url;
+}
+
+string WakeupEvent::getDlMusicFile()
+{
+    return this->dlMusicFile;
+}
+void WakeupEvent::setDlMusicFile(string musicFile)
+{
+    this->dlMusicFile = musicFile;
+}
