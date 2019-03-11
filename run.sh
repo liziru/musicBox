@@ -12,6 +12,8 @@
 binPath=/root
 sounderBin=$binPath/mozart
 
+node /home/pi/NeteaseCloudMusicApi/app.js 
+
 ps -fe|grep sounder |grep -v grep
 if [ $? -ne 0 ]
 then

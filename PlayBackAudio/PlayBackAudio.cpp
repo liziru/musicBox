@@ -5,7 +5,7 @@
  * @Author: Lipingping
  * @Date: 2019-01-30 18:43:04
  * @LastEditors: Lipingping
- * @LastEditTime: 2019-03-08 12:23:54
+ * @LastEditTime: 2019-03-11 18:45:44
  */
 
 #include "PlayBackAudio.h"
@@ -295,7 +295,6 @@ void *PlayBackAudio::playback_process(void *p)
 {
 	// pthread_detach(pthread_self());
 	PlayBackAudio *pb = (PlayBackAudio *)p;
-	// pb->isRun = true;
 	int err = 0, buffer_frames = FRAMELEN, ret = 0;
 	int time_delay = 12000, err_count = 0;
 	short *inputMicData16s = (short *)malloc(sizeof(short) * FRAMELEN * pb->channel);
@@ -313,6 +312,7 @@ void *PlayBackAudio::playback_process(void *p)
 
 	while (1)
 	{
+		pb->stop();
 		pthread_mutex_lock(&pb->m_Mutex);
 		pthread_cond_wait(&pb->m_Cond, &pb->m_Mutex);
 		pthread_mutex_unlock(&pb->m_Mutex);

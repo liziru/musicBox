@@ -69,7 +69,7 @@ void *TtsService::launchProcess(void *p)
             // sleep(1);
             // macroFuncVargs("ATTENTION: tts is finished,file name:%s", ttsLauncher->wakeupEvent->getPbFile().c_str());
 
-            ttsLauncher->playBack->start();
+            ttsLauncher->playBack->start(); //开启音乐播放
             ttsLauncher->wakeupEvent->setPbFile(ttsResult->getTtsVoiceFilename());
             macroFuncVargs("ATTENTION: tts is finished,file name:%s", ttsLauncher->wakeupEvent->getPbFile().c_str());
 

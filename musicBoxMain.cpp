@@ -53,13 +53,14 @@ int main(int argc, char *argv[])
     initThreadArgu();
 
     PlayBackAudio *playBack = PlayBackAudio::getInstance(string("hw:0"), 16000, 1, SND_PCM_FORMAT_S16_LE, 1, 4, 0.06);
+    AsrService *asrService = new AsrService();
+    TtsService *ttsService = new TtsService(playBack);
+
     SemanticsAnalysis *sa = new SemanticsAnalysis();
     NeteaseMusicService *neteaseService = new NeteaseMusicService();
     DownloadService *downloadService = new DownloadService();
-    NeteaseMusicLanucher *neteaseLanucher = new NeteaseMusicLanucher(playBack, downloadService);
+    NeteaseMusicLanucher *neteaseLanucher = new NeteaseMusicLanucher(playBack, downloadService, ttsService);
 
-    AsrService *asrService = new AsrService();
-    TtsService *ttsService = new TtsService(playBack);
     MicDataSource *micDataSource = MicDataSource::getInstance(string("hw:0"), 16000, 1, SND_PCM_FORMAT_S16_LE, 1, 4, 0.06);
     IWakeupService *iWakeupService = new IWakeupService(1e-15, 1e-1, 300, 2000, &dispatcher, ttsService);
     FUNC_POINTER funcPointer;
